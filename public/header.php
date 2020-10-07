@@ -6,10 +6,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a href="./" class="nav-link" :class="{active: page == 'tabA'}">Deklarācijas</a>
+        <a href="./" class="nav-link" :class="{active: page == 'tabA'}">Partiju finanšu</a>
       </li>
       <li class="nav-item">
-        <a href="./party-finance.php" class="nav-link" :class="{active: page == 'tabB'}">Partiju finanšu</a>
+        <a href="./declarations.php" class="nav-link" :class="{active: page == 'tabB'}">Deklarācijas</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">

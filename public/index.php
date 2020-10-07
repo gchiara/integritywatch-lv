@@ -49,8 +49,14 @@
               <div class="chart-inner" id="topdonors_chart"></div>
             </div>
           </div>
-          <div class="col-md-6 chart-col">
-            <div class="boxed-container chart-container tab_a_3">
+          <div class="col-md-8 chart-col">
+            <div class="boxed-container chart-container tab_a_4">
+              <chart-header :title="charts.bubble.title" :info="charts.bubble.info" ></chart-header>
+              <div class="chart-inner" id="bubble_chart"></div>
+            </div>
+          </div>
+          <div class="col-md-4 chart-col">
+            <div class="boxed-container chart-container tab_a_5">
               <chart-header :title="charts.amtCategory.title" :info="charts.amtCategory.info" ></chart-header>
               <div class="chart-inner" id="amtcategory_chart"></div>
             </div>

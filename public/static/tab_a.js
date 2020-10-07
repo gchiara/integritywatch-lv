@@ -46861,6 +46861,11 @@ var charts = {
     type: 'row',
     divId: 'topdonors_chart'
   },
+  bubble: {
+    chart: dc.bubbleChart("#bubble_chart"),
+    type: 'bubble',
+    divId: 'bubble_chart'
+  },
   amtCategory: {
     chart: dc.rowChart("#amtcategory_chart"),
     type: 'row',
@@ -46939,6 +46944,10 @@ var resizeGraphs = function resizeGraphs() {
       });
       charts[c].chart.redraw();
     } else if (charts[c].type == 'bar') {
+      charts[c].chart.width(newWidth);
+      charts[c].chart.rescale();
+      charts[c].chart.redraw();
+    } else if (charts[c].type == 'line') {
       charts[c].chart.width(newWidth);
       charts[c].chart.rescale();
       charts[c].chart.redraw();
@@ -47034,7 +47043,7 @@ for (var i = 0; i < 5; i++) {
 
   var ndx = crossfilter(finance);
   var searchDimension = ndx.dimension(function (d) {
-    var entryString = d['Partija'] + ' ' + d['Dāvinātājs'];
+    var entryString = d['Partija'] + ' ' + d['Dāvinātājs'] + ' ' + d['Year'];
     return entryString.toLowerCase();
   }); //CHART 1
 
@@ -47095,32 +47104,10 @@ for (var i = 0; i < 5; i++) {
       left: 30,
       right: 0,
       bottom: 20
-    }).group(group).dimension(dimension).x(d3.scaleBand()).xUnits(dc.units.ordinal).brushOn(false).xAxisLabel('').yAxisLabel('').renderHorizontalGridLines(true) //.xUnits(d3.timeMonths)
-    .elasticY(true).title(function (d) {
+    }).group(group).dimension(dimension).x(d3.scaleBand()).xUnits(dc.units.ordinal).brushOn(true).xAxisLabel('').yAxisLabel('').renderHorizontalGridLines(true) //.xUnits(d3.timeMonths)
+    .elasticY(true).elasticX(false).title(function (d) {
       return d.key + ': ' + d.value.toFixed(2);
-    }); //.curve(d3.curveLinear)
-
-    /*
-    .colorCalculator(function(d, i) {
-      return vuedata.colors.default1;
-    })
-    */
-
-    /*
-     .label(function (d) {
-         if(d.key && d.key.length > charsLength){
-           return d.key.substring(0,charsLength) + '...';
-         }
-         return d.key;
-     })
-     .title(function (d) {
-         return d.key + ': ' + d.value.toFixed(2);
-     });
-     */
-    //.elasticX(true)
-    //.xAxis().ticks(4);
-    //chart.xAxis().tickFormat(numberFormat);
-
+    });
     chart.render();
   }; //CHART 3
 
@@ -47164,6 +47151,78 @@ for (var i = 0; i < 5; i++) {
     }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
 
     chart.render();
+  }; //CHART 4
+
+
+  var createBubbleChart = function createBubbleChart() {
+    var chart = charts.bubble.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d['Partija'];
+    });
+    var group = dimension.group().reduce(function (p, d) {
+      ++p.count;
+      p.totalAmtDonated += parseFloat(d.donationAmt);
+      p.avgAmtDonated = p.totalAmtDonated / p.count;
+
+      if (p.donors[d['Dāvinātājs']]) {
+        p.donors[d['Dāvinātājs']]++;
+      } else {
+        p.donors[d['Dāvinātājs']] = 1;
+        p.donorsNum++;
+      }
+
+      return p;
+    }, function (p, d) {
+      --p.count;
+      p.totalAmtDonated -= parseFloat(d.donationAmt);
+      p.avgAmtDonated = p.count ? p.totalAmtDonated / p.count : 0;
+
+      if (p.donors[d['Dāvinātājs']] && p.donors[d['Dāvinātājs']] > 1) {
+        p.donors[d['Dāvinātājs']]--;
+      } else if (p.donors[d['Dāvinātājs']] == 1) {
+        p.donors[d['Dāvinātājs']] = 0;
+        p.donorsNum--;
+      }
+
+      return p;
+    }, function (p, d) {
+      return {
+        count: 0,
+        totalAmtDonated: 0,
+        avgAmtDonated: 0,
+        donors: {},
+        donorsNum: 0
+      };
+    });
+    var width = recalcWidth(charts.bubble.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(520).margins({
+      top: 0,
+      left: 35,
+      right: 10,
+      bottom: 35
+    }).group(group).dimension(dimension).colorCalculator(function (d, i) {
+      return vuedata.colors.default1;
+    }).title(function (d) {
+      //console.log(d.key);
+      //console.log(d.value);
+      return d.key;
+    }) // `.colorAccessor` - the returned value will be passed to the `.colors()` scale to determine a fill color
+    //.colorAccessor(function(d) {return d.value.absGain})
+    // `.keyAccessor` - the `X` value will be passed to the `.x()` scale to determine pixel location
+    .keyAccessor(function (d) {
+      return d.value.donorsNum;
+    }) // `.valueAccessor` - the `Y` value will be passed to the `.y()` scale to determine pixel location
+    .valueAccessor(function (d) {
+      return d.value.avgAmtDonated;
+    }) // `.radiusValueAccessor` - the value will be passed to the `.r()` scale to determine radius size;
+    //   by default this maps linearly to [0,100]
+    .radiusValueAccessor(function (d) {
+      return d.value.totalAmtDonated;
+    }).maxBubbleRelativeSize(0.2).minRadius(5).x(d3.scaleLinear().domain([0, 100])).y(d3.scaleLinear().domain([-1000, 5000])).r(d3.scaleLinear().domain([-10000, 4000000])).yAxisPadding(30).xAxisPadding(10).xAxisLabel('Donors').yAxisLabel('Avg donation').elasticY(true).elasticX(true); //.xAxis().ticks(4);
+    //chart.xAxis().tickFormat(numberFormat);
+
+    chart.render();
   }; //CHART 5
 
 
@@ -47178,7 +47237,7 @@ for (var i = 0; i < 5; i++) {
     var order = ['negatīvi ziedojumi', '0—1000', '1000—2500', '2500—5000', '5000—7500', '7500—9500', '9500 +', 'N/A'];
     var width = recalcWidth(charts.amtCategory.divId);
     var charsLength = recalcCharsLength(width);
-    chart.width(width).height(420).margins({
+    chart.width(width).height(490).margins({
       top: 0,
       left: 0,
       right: 10,
@@ -47194,7 +47253,7 @@ for (var i = 0; i < 5; i++) {
     }).title(function (d) {
       return d.key + ': ' + d.value.toFixed(2);
     }).ordering(function (d) {
-      return order.indexOf(d);
+      return order.indexOf(d.key);
     }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
 
     chart.render();
@@ -47343,6 +47402,7 @@ for (var i = 0; i < 5; i++) {
   createDonationsPerYearChart();
   createTopDonorsChart();
   createAmtCategoryChart();
+  createBubbleChart();
   $('.dataTables_wrapper').append($('.dataTables_length')); //Hide loader
 
   vuedata.loader = false; //COUNTERS
@@ -47448,7 +47508,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64745" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56672" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
