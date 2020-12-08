@@ -21,54 +21,63 @@
           <div class="col-md-12">
             <div class="row">
               <!-- INFO -->
-              <div class="col-md-8 chart-col" v-if="showInfo">
+              <div class="col-md-8 chart-col">
                 <div class="boxed-container description-container">
-                  <h1>Lorem Ipsum</h1>
-                  <p>This is a user-friendly database that provides a unique overview of private interests of Latvian MPs.<br />
-                    By simply clicking on the graphs or the list below users can rank, sort and filter private interests. <a href="./about.php">Read more</a>.</p>
-                  <i class="material-icons close-btn" @click="showInfo = false">close</i>
+                  <h1>Deputāti uz Delnas - Deputātu deklarācijas</h1>
+                  <p>Šī ir lietotājam draudzīga datu bāze, kas sniedz ieskatu Saeimas deputātu deklarētajās ārējās interesēs. Uzejot uz infografika vai saraksta zemāk, lietotajs var sarindot, atlasīt un filtrēt deklarētās vērtības.</p>
+                </div>
+              </div>
+              <div class="col-md-4 chart-col">
+                <div class="boxed-container chart-container">
+                  <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
+                  <div class="years-btn-container">
+                    <button class="year-btn" id="y2018">2018</button>
+                    <button class="year-btn" id="y2019">2019</button>
+                    <button class="year-btn yall active" id="yall">All years</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4 chart-col">
-            <div class="boxed-container chart-container">
-              <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
-              <div class="years-btn-container">
-                <button class="year-btn y2018">2018</button>
-                <button class="year-btn y2019">2019</button>
-                <button class="year-btn yall active">All years</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8"></div>
           <!-- CHARTS FIRST ROW -->
-          <div class="col-md-4 chart-col">
+          <div class="col-md-3 chart-col">
             <div class="boxed-container chart-container tab_b_1">
-              <chart-header :title="charts.outsidePositions.title" :info="charts.outsidePositions.info" ></chart-header>
-              <div class="chart-inner" id="outsidepositions_chart"></div>
+              <chart-header :title="charts.groups.title" :info="charts.groups.info" ></chart-header>
+              <div class="chart-inner" id="groups_chart"></div>
             </div>
           </div>
-          <div class="col-md-4 chart-col">
+          <div class="col-md-3 chart-col">
             <div class="boxed-container chart-container tab_b_2">
               <chart-header :title="charts.topSectorsIncome.title" :info="charts.topSectorsIncome.info" ></chart-header>
               <div class="chart-inner" id="topsectorsincome_chart"></div>
             </div>
           </div>
-          <div class="col-md-4 chart-col">
+          <div class="col-md-3 chart-col">
             <div class="boxed-container chart-container tab_b_3">
+              <chart-header :title="charts.incomeType.title" :info="charts.incomeType.info" ></chart-header>
+              <div class="chart-inner" id="incometype_chart"></div>
+            </div>
+          </div>
+          <div class="col-md-3 chart-col">
+            <div class="boxed-container chart-container tab_b_4">
               <chart-header :title="charts.topSectorsHolding.title" :info="charts.topSectorsHolding.info" ></chart-header>
               <div class="chart-inner" id="topsectorsholding_chart"></div>
             </div>
           </div>
-          <div class="col-md-6 chart-col">
-            <div class="boxed-container chart-container tab_b_4">
+          <div class="col-md-4 chart-col">
+            <div class="boxed-container chart-container tab_b_5">
+              <chart-header :title="charts.outsidePositions.title" :info="charts.outsidePositions.info" ></chart-header>
+              <div class="chart-inner" id="outsidepositions_chart"></div>
+            </div>
+          </div>
+          <div class="col-md-4 chart-col">
+            <div class="boxed-container chart-container tab_b_6">
               <chart-header :title="charts.incomeValues.title" :info="charts.incomeValues.info" ></chart-header>
               <div class="chart-inner" id="incomevalues_chart"></div>
             </div>
           </div>
-          <div class="col-md-6 chart-col">
-            <div class="boxed-container chart-container tab_b_5">
+          <div class="col-md-4 chart-col">
+            <div class="boxed-container chart-container tab_b_7">
               <chart-header :title="charts.holdingValues.title" :info="charts.holdingValues.info" ></chart-header>
               <div class="chart-inner" id="holdingvalues_chart"></div>
             </div>
@@ -82,11 +91,11 @@
                   <thead>
                     <tr class="header">
                       <th class="header">Nr</th> 
-                      <th class="header">Surname, Name</th>
-                      <th class="header">Parliamentary Group</th>
-                      <th class="header">N. Outside positions</th>
-                      <th class="header">Holding value</th>
-                      <th class="header">Income Value</th>
+                      <th class="header">Deputāts</th>
+                      <th class="header">Frakcija</th>
+                      <th class="header">Arēju amatu skaits</th>
+                      <th class="header">Akciju un kapitāļu daļu kopējā vertība</th>
+                      <th class="header">Ārēju ienākumu kopējā vertība</th>
                     </tr>
                   </thead>
                 </table>
@@ -111,31 +120,75 @@
               <div class="container">
                 <div class="row">
                   <div class="col-md-12">
+                  <div class="details-line"><span class="details-line-title">Deputāta mandāta statusa: </span> {{ selectedElement.Mandate_status }}</div>
                     <div class="details-line" v-if="selectedElement.Frakcija"><span class="details-line-title">Frakcija: </span> {{ selectedElement.Frakcija }}</div>
-                    <div class="details-line"><span class="details-line-title">Outside positions: </span> {{ selectedElement.OutsidePositionsNum }}</div>
-                    <div class="details-line"><span class="details-line-title">Interests:</span></div>
-                    <table class="interests-table">
+                    <div class="details-line" v-if="selectedElement.DeclYear"><span class="details-line-title">Deklarācijas gads: </span> {{ selectedElement.DeclYear }}</div>
+                    <div class="details-line" v-if="selectedElement.filed_as"><span class="details-line-title">Deklarācija izsniegta kā: </span> {{ selectedElement.filed_as }}</div>
+                    <div class="details-line" v-if="selectedElement.Committees"><span class="details-line-title">Saeimas komisijas deklarācijas gadā </span> {{ selectedElement.Committees }}</div>
+                    <div class="details-line details-line-title-table"><span class="details-line-title">A) Amati privātā sektorā, pilsoniskās sabiedrības un akademikās iestādes</span></div>
+                    <table class="interests-table" v-if="interestType1(selectedElement).length > 0">
                       <thead>
                         <tr>
-                          <th>Year</th>
-                          <th>Type</th>
-                          <th>Entity</th>
-                          <th>Income Type / Fin_v</th>
-                          <th>Income Value / Fin_v_val</th>
+                          <th>Amats</th>
+                          <th>Juridiskas personas veids</th>
+                          <th>Juridiskas personas vards</th>
+                          <th>Ekonomikas nozare</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="i in selectedElement.interests">
-                          <td>{{ i.DeclYear }}</td>
-                          <td>{{ i.Interest_Type }}</td>
+                        <tr v-for="i in interestType1(selectedElement)">
+                          <td>{{ i.Position }}</td>
+                          <td>{{ i.Entity_Type }}</td>
                           <td>{{ i.Entity_name }}</td>
-                          <td v-if="i.Income_type !== ''">{{ i.Income_type }}</td>
-                          <td v-else>{{ i.Fin_v }}</td>
-                          <td v-if="i.Income_type !== ''">{{ i.Income_value }}</td>
-                          <td v-else>{{ i.Fin_v_value }}</td>
+                          <td>{{ i.NACE_1 }}</td>
                         </tr>
                       </tbody>
                     </table>
+                    <div style="text-align:left;" v-else>/</div>
+                    <div class="details-line details-line-title-table"><span class="details-line-title">B) Akcijas un kapitāla daļas komērcsabiedrībās</span></div>
+                    <table class="interests-table" v-if="interestType2(selectedElement).length > 0">
+                      <thead>
+                        <tr>
+                          <th>Kapitāla veids</th>
+                          <th>Vertība</th>
+                          <th>Juridiskas personas veids</th>
+                          <th>Juridiskas personas vards</th>
+                          <th>Ekonomikas nozare</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="i in interestType2(selectedElement)">
+                          <td>{{ i.Fin_v }}</td>
+                          <td>{{ i.Fin_v_value }}</td>
+                          <td>{{ i.Entity_Type }}</td>
+                          <td>{{ i.Entity_name}}</td>
+                          <td>{{ i.NACE_1 }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div style="text-align:left;" v-else>/</div>
+                    <div class="details-line details-line-title-table"><span class="details-line-title">C) Arējie ienākumi </span></div>
+                    <table class="interests-table" v-if="interestType3(selectedElement).length > 0">
+                      <thead>
+                        <tr>
+                          <th>Ienākuma veids</th>
+                          <th>Vertība</th>
+                          <th>Juridiskas personas veids</th>
+                          <th>Juridiskas personas vards</th>
+                          <th>Ekonomikas nozare</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="i in interestType3(selectedElement)">
+                          <td>{{ i.Income_type }}</td>
+                          <td>{{ i.Income_value }}</td>
+                          <td>{{ i.Entity_Type }}</td>
+                          <td>{{ i.Entity_name }}</td>
+                          <td>{{ i.NACE_1 }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div style="text-align:left;" v-else>/</div>
                   </div>
                 </div>
               </div>

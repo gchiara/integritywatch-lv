@@ -779,10 +779,6 @@ div.dc-html-legend {
   stroke-width: 5;
 }
 
-.pie-label {
-  display: none;
-}
-
 .dc-chart svg:not(:root) {
   overflow: visible;
 }
@@ -1160,13 +1156,13 @@ table.dataTable tbody tr:hover {
   background: #fafafa;
 }
 .chart-header .chart-title[data-v-c13f10] {
-  font-size: 20px;
+  font-size: 18px;
   text-align: left;
   color: #020c10;
 }
 @media only screen and (max-width: 1400px) {
 .chart-header .chart-title[data-v-c13f10] {
-    font-size: 18px;
+    font-size: 16px;
 }
 }
 @media only screen and (max-width: 1250px) {
@@ -1176,7 +1172,7 @@ table.dataTable tbody tr:hover {
 }
 @media only screen and (max-width: 767px) {
 .chart-header .chart-title[data-v-c13f10] {
-    font-size: 20px;
+    font-size: 18px;
 }
 }
 .chart-header .chart-header-buttons[data-v-c13f10] {

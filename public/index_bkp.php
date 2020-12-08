@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_a1.css">
+    <link rel="stylesheet" href="static/tab_a.css">
 </head>
 <body>
     <div id="app" class="tabA">   
@@ -21,28 +21,13 @@
           <div class="col-md-12">
             <div class="row">
               <!-- INFO -->
-              <div class="col-md-8 chart-col">
-                <!-- SUBSECION MENU -->
-                <div class="section-btn-container">
-                  <a href="./" class="section-btn active">Privātie ziedojumi</a>
-                  <a href="./party_member_fees.php" class="section-btn">Biedru nauda</a>
-                  <a href="./mp_donations.php" class="section-btn">Saeimas deputātu ziedojumi</a>
-                  <a href="./party_expenditures.php" class="section-btn">Partiju izdevumi</a>
-                </div>
+              <div class="col-md-8 chart-col" v-if="showInfo">
                 <div class="boxed-container description-container">
-                  <h1>Deputāti uz Delnas - Politisko partiju finansēšana - Privātie ziedojumi</h1>
-                  <p>Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par Latvijas politisko partiju privātajiem ziedojumiem. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt privatpersonu ziedojumus.</p>
-                </div>
-              </div>
-              <div class="col-md-4 chart-col">
-                <div class="boxed-container chart-container">
-                  <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
-                  <div class="years-btn-container">
-                    <button class="year-btn" id="y2018" :disabled="dataYears.indexOf('2018') == -1">2018</button>
-                    <button class="year-btn" id="y2019" :disabled="dataYears.indexOf('2019') == -1">2019</button>
-                    <button class="year-btn" id="y2020" :disabled="dataYears.indexOf('2020') == -1">2020</button>
-                    <button class="year-btn active" id="yall">All years</button>
-                  </div>
+                  <h1>Integrity Watch Latvia - Political Financing</h1>
+                  <p>This is a user-friendly database that provides a unique overview of private donations received by Latvian political parties by private individuals.<br /> 
+                  By simply clicking on the graphs or the list below users can rank, sort and filter donations.<br />
+                  <a href="./about.php">Read more</a>.</p>
+                  <i class="material-icons close-btn" @click="showInfo = false">close</i>
                 </div>
               </div>
             </div>
@@ -54,13 +39,7 @@
               <div class="chart-inner" id="toprecipients_chart"></div>
             </div>
           </div>
-          <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_2">
-              <chart-header :title="charts.donationsType.title" :info="charts.donationsType.info" ></chart-header>
-              <div class="chart-inner" id="donationstype_chart"></div>
-            </div>
-          </div>
-          <div class="col-md-3 chart-col">
+          <div class="col-md-6 chart-col">
             <div class="boxed-container chart-container tab_a_2">
               <chart-header :title="charts.donationsPerYear.title" :info="charts.donationsPerYear.info" ></chart-header>
               <div class="chart-inner" id="donationsperyear_chart"></div>
@@ -70,6 +49,18 @@
             <div class="boxed-container chart-container tab_a_3">
               <chart-header :title="charts.topDonors.title" :info="charts.topDonors.info" ></chart-header>
               <div class="chart-inner" id="topdonors_chart"></div>
+            </div>
+          </div>
+          <div class="col-md-8 chart-col">
+            <div class="boxed-container chart-container tab_a_4">
+              <chart-header :title="charts.bubble.title" :info="charts.bubble.info" ></chart-header>
+              <div class="chart-inner" id="bubble_chart"></div>
+            </div>
+          </div>
+          <div class="col-md-4 chart-col">
+            <div class="boxed-container chart-container tab_a_5">
+              <chart-header :title="charts.amtCategory.title" :info="charts.amtCategory.info" ></chart-header>
+              <div class="chart-inner" id="amtcategory_chart"></div>
             </div>
           </div>
           <!-- TABLE -->
@@ -82,10 +73,10 @@
                     <tr class="header">
                       <th class="header">Nr</th> 
                       <th class="header">Partija</th>
-                      <th class="header">Ziedojuma veids</th>
-                      <th class="header">Vertība</th>
-                      <th class="header">Ziedotājs</th>
-                      <th class="header">Datums</th>
+                      <th class="header">Veids</th>
+                      <th class="header">Vērtība</th>
+                      <th class="header">Dāvinātājs</th>
+                      <th class="header">Datum</th>
                     </tr>
                   </thead>
                 </table>
@@ -122,8 +113,8 @@
       <div class="container-fluid footer-bar">
         <div class="row">
           <div class="footer-col col-12 col-sm-12 footer-counts">
-            <div class="dc-data-count count-box">
-              <div class="filter-count nbdonors">0</div>no <strong class="total-count">0</strong> entries
+            <div class="dc-data-count count-box count-box-donors">
+              <div class="filter-count nbdonors">0</div>no <strong class="total-count">0</strong> donori
             </div>
             <div class="footer-input">
               <input type="text" id="search-input" placeholder="Meklēt">
@@ -148,7 +139,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_a1.js"></script>
+    <script src="static/tab_a.js"></script>
 
  
 </body>

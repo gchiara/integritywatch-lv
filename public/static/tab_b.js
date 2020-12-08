@@ -46757,6 +46757,7 @@ window.underscore = _underscore.default;
 window._ = _underscore.default;
 // Data object - is also used by Vue
 var vuedata = {
+  section: 'tabB',
   page: 'tabB',
   loader: true,
   readMore: false,
@@ -46766,29 +46767,37 @@ var vuedata = {
   chartMargin: 40,
   selectedYear: 'all',
   charts: {
+    groups: {
+      title: 'Frakcijas',
+      info: 'Infografiks rāda Saeimas frakciju deklarētās vērtības vairākās kategorijās: a) amati privātajā sektorā, nevalstiskajā sektorā un akadēmiskajā jomā; b) akcijas un kapitāldaļās privātos uzņēmumos; c) ieņēmumi, kas gūti privātajā sektorā, nevalstiskaja sektorā un akadēmiskajās iestādēs.'
+    },
     yearsFilter: {
       title: 'Years filter',
       info: ''
     },
     outsidePositions: {
-      title: 'N. of MPs / N. of Outside Positions',
-      info: ''
+      title: 'Deputātu skaits pēc arēju amatu skaita',
+      info: 'Infografikā ir redzams deputātu sadalījums pēc ārējo amatu skaita'
     },
     topSectorsIncome: {
-      title: 'Top 5 economic sectors / (tot. income value)',
-      info: ''
+      title: 'Ārējie ienākumi - Top 10 ekonomikas nozarēs',
+      info: 'Infografikā ir redzamas 10 ekonomikas nozares, no kurām Saeimas deputāti gūst lielākos ārējos ienākumus.'
+    },
+    incomeType: {
+      title: 'Ārēja ienākuma veids',
+      info: 'Infografikā ir redzama dažādu ārējo ienākumu kopējā vērtībā.'
     },
     topSectorsHolding: {
-      title: 'Top 5 economic sectors (tot. holding value)',
-      info: ''
+      title: 'Akciju un kapitāļa daļu vertība - Top 10 ekonomikas nozarēs',
+      info: 'Infografikā ir redzamas 10 ekonomikas nozares, kurās Saeimas deputātiem pieder visvairāk akcijas vai kapitāldaļas privātos uzņēmumos.'
     },
     incomeValues: {
-      title: 'N. of MPs / Income value categories',
-      info: ''
+      title: 'Deputātu skaits pēc arēja ienakuma vertības',
+      info: 'Infografikā ir redzams deputātu sadalījums dažādās ārējo ienākumu vērtību skalās'
     },
     holdingValues: {
-      title: 'N. of MPs / holding value categories',
-      info: ''
+      title: 'Deputātu skaits pēc akciju un kapitāļa daļu vertības',
+      info: 'Infografikā ir redzams deputātu sadalījums pēc dažādām akciju un kapitāldaļu vērtību skalām. '
     },
     mainTable: {
       chart: null,
@@ -46837,6 +46846,34 @@ new _vue.default({
         window.open(shareURL, '_blank', 'toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250,top=300,left=300');
         return;
       }
+    },
+    interestType1: function interestType1(el) {
+      if (!el.interests) {
+        return [];
+      }
+
+      return _.filter(el.interests, function (i) {
+        return i.Interest_Type.indexOf('Position') > -1;
+      });
+    },
+    interestType2: function interestType2(el) {
+      if (!el.interests) {
+        return [];
+      }
+
+      return _.filter(el.interests, function (i) {
+        return i.Interest_Type === 'Holding | Commercial Companies';
+      });
+    },
+    interestType3: function interestType3(el) {
+      if (!el.interests) {
+        return [];
+      }
+
+      var allowedTypes = ['Income | Private', 'Income | Academia', 'Income | Foreign Institution', 'Income | Self-employment'];
+      return _.filter(el.interests, function (i) {
+        return allowedTypes.indexOf(i.Interest_Type) > -1;
+      });
     }
   }
 }); //Initialize info popovers
@@ -46846,6 +46883,11 @@ $(function () {
 }); //Charts
 
 var charts = {
+  groups: {
+    chart: dc.rowChart("#groups_chart"),
+    type: 'row',
+    divId: 'groups_chart'
+  },
   outsidePositions: {
     chart: dc.barChart("#outsidepositions_chart"),
     type: 'bar',
@@ -46853,8 +46895,13 @@ var charts = {
   },
   topSectorsIncome: {
     chart: dc.rowChart("#topsectorsincome_chart"),
-    type: 'rob',
+    type: 'row',
     divId: 'topsectorsincome_chart'
+  },
+  incomeType: {
+    chart: dc.pieChart("#incometype_chart"),
+    type: 'pie',
+    divId: 'incometype_chart'
   },
   topSectorsHolding: {
     chart: dc.rowChart("#topsectorsholding_chart"),
@@ -46982,8 +47029,9 @@ function addcommas(x) {
 function cleanCurrencyValue(val) {
   val = val.replace("€ ", "");
   val = val.replace("€", "");
-  val = val.replace(/\./g, '');
-  val = val.replace(",", ".");
+  val = val.replace(/\,/g, ''); //val = val.replace(/\./g,'');
+  //val = val.replace(",", ".");
+
   return val;
 } //Custom date order for dataTables
 
@@ -47031,8 +47079,10 @@ for (var i = 0; i < 5; i++) {
       //If MP not yet added, add it
       var newMp = {
         Surname_name: d.Surname_name,
-        UI: d.UI,
-        Former: d.Former,
+        Mandate_status: d.Mandate_status,
+        DeclYear: d.DeclYear,
+        filed_as: d.filed_as,
+        Committees: d.Committees,
         Frakcija: d.Frakcija,
         OutsidePositionsNum: 0,
         OutsidePositionsNum2018: 0,
@@ -47058,6 +47108,7 @@ for (var i = 0; i < 5; i++) {
       DeclYear: d.DeclYear,
       Interest_Type: d.Interest_Type,
       Entity_name: d.Entity_name,
+      Entity_Type: d.Entity_Type,
       Entity_RegNum: d.Entity_RegNum,
       Municipality: d.Municipality,
       Region: d.Region,
@@ -47072,7 +47123,7 @@ for (var i = 0; i < 5; i++) {
     };
     thisMp.interests.push(thisInterest);
 
-    if (thisInterest.Interest_Type == "Position / Private") {
+    if (thisInterest.Interest_Type.indexOf("Position") > -1) {
       thisMp.OutsidePositionsNum++;
     }
 
@@ -47087,7 +47138,7 @@ for (var i = 0; i < 5; i++) {
     if (d.DeclYear == 2018) {
       thisMp.interests2018.push(thisInterest);
 
-      if (thisInterest.Interest_Type == "Position / Private") {
+      if (thisInterest.Interest_Type.indexOf("Position") > -1) {
         thisMp.OutsidePositionsNum2018++;
       }
 
@@ -47103,7 +47154,7 @@ for (var i = 0; i < 5; i++) {
     if (d.DeclYear == 2019) {
       thisMp.interests2019.push(thisInterest);
 
-      if (thisInterest.Interest_Type == "Position / Private") {
+      if (thisInterest.Interest_Type.indexOf("Position") > -1) {
         thisMp.OutsidePositionsNum2019++;
       }
 
@@ -47115,9 +47166,8 @@ for (var i = 0; i < 5; i++) {
         thisMp.Holdings_tot2019 += parseFloat(d.Fin_v_value);
       }
     }
-  });
+  }); //Set totals for custom counters
 
-  console.log(declarations); //Set totals for custom counters
 
   $('.count-box-interests .total-count2').html(totInterests); //Set dc main vars. The second crossfilter is used to handle the travels stacked bar chart.
 
@@ -47128,47 +47178,56 @@ for (var i = 0; i < 5; i++) {
     return entryString.toLowerCase();
   }); //CHART 1
 
-  var createOutsidePositionsChart = function createOutsidePositionsChart() {
-    var chart = charts.outsidePositions.chart;
+  var createGroupsChart = function createGroupsChart() {
+    var chart = charts.groups.chart;
     var dimension = ndx.dimension(function (d) {
-      var interestsNum = d.OutsidePositionsNum;
-
+      return d['Frakcija'];
+    });
+    var group = dimension.group().reduceSum(function (d) {
       if (vuedata.selectedYear == 2018) {
-        interestsNum = d.OutsidePositionsNum2018;
+        return d.interests2018.length;
       }
 
       ;
 
       if (vuedata.selectedYear == 2019) {
-        interestsNum = d.OutsidePositionsNum2019;
+        return d.interests2019.length;
       }
 
       ;
-
-      if (interestsNum >= 10) {
-        return "10+";
-      }
-
-      ;
-      return interestsNum.toString();
+      return d.interests.length;
     });
-    var group = dimension.group().reduceSum(function (d) {
-      return 1;
-    });
-    var width = recalcWidth(charts.outsidePositions.divId);
-    chart.width(width).height(380).group(group).dimension(dimension).on("preRender", function (chart, filter) {}).margins({
+
+    var filteredGroup = function (source_group) {
+      return {
+        all: function all() {
+          return source_group.top(30).filter(function (d) {
+            return d.value != 0;
+          });
+        }
+      };
+    }(group);
+
+    var width = recalcWidth(charts.groups.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(420).margins({
       top: 0,
+      left: 0,
       right: 10,
-      bottom: 20,
-      left: 20
-    }) //.x(d3.scaleBand().domain(["2017", "2018", "2019"]))
-    //.x(d3.scaleLinear())
-    .x(d3.scaleBand().domain(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"])).xUnits(dc.units.ordinal).gap(10).elasticY(true); //.ordinalColors(vuedata.colors.default1)
+      bottom: 20
+    }).group(filteredGroup).dimension(dimension).colorCalculator(function (d, i) {
+      return vuedata.colors.default1;
+    }).label(function (d) {
+      if (d.key && d.key.length > charsLength) {
+        return d.key.substring(0, charsLength) + '...';
+      }
+
+      return d.key;
+    }).title(function (d) {
+      return d.key + ': ' + d.value.toFixed(2);
+    }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
 
     chart.render();
-    chart.on('filtered', function (c) {
-      RefreshTable();
-    });
   }; //CHART 2
 
 
@@ -47193,8 +47252,7 @@ for (var i = 0; i < 5; i++) {
           amt = 0;
         }
 
-        ; //console.log(val);
-
+        ;
         p[k] = (p[k] || 0) + amt; //increment counts
       });
       return p;
@@ -47220,8 +47278,7 @@ for (var i = 0; i < 5; i++) {
           amt = 0;
         }
 
-        ; //console.log(val);
-
+        ;
         p[k] = (p[k] || 0) - amt; //decrement counts
       });
       return p;
@@ -47282,8 +47339,7 @@ for (var i = 0; i < 5; i++) {
       return d.key;
     }).title(function (d) {
       return d.key + ': ' + d.value.toFixed(2);
-    }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
-
+    }).elasticX(true).xAxis().ticks(4);
     chart.render();
     chart.filterHandler(function (dimension, filters) {
       dimension.filter(null);
@@ -47296,6 +47352,174 @@ for (var i = 0; i < 5; i++) {
       });
       RefreshTable();
       return filters;
+    });
+  }; //CHART 2
+
+
+  var createIncomeTypeChart = function createIncomeTypeChart() {
+    function reduceAdd(p, v) {
+      var interestsArray = v.interests;
+
+      if (vuedata.selectedYear == 2018) {
+        interestsArray = v.interests2018;
+      }
+
+      if (vuedata.selectedYear == 2019) {
+        interestsArray = v.interests2019;
+      }
+
+      interestsArray.forEach(function (val, idx) {
+        var k = val['Income_type'];
+        var amt = parseFloat(val.Income_value);
+
+        if (!amt || isNaN(amt)) {
+          amt = 0;
+        }
+
+        ;
+        p[k] = (p[k] || 0) + amt; //increment counts
+      });
+      return p;
+    }
+
+    function reduceRemove(p, v) {
+      var interestsArray = v.interests;
+
+      if (vuedata.selectedYear == 2018) {
+        interestsArray = v.interests2018;
+      }
+
+      if (vuedata.selectedYear == 2019) {
+        interestsArray = v.interests2019;
+      }
+
+      interestsArray.forEach(function (val, idx) {
+        var k = val['Income_type'];
+        var amt = parseFloat(val.Income_value);
+
+        if (!amt || isNaN(amt)) {
+          amt = 0;
+        }
+
+        ;
+        p[k] = (p[k] || 0) - amt; //decrement counts
+      });
+      return p;
+    }
+
+    function reduceInitial() {
+      return {};
+    }
+
+    var chart = charts.incomeType.chart;
+    var dimension = ndx.dimension(function (d) {
+      if (vuedata.selectedYear == 2018) {
+        return d.interests2018;
+      }
+
+      ;
+
+      if (vuedata.selectedYear == 2019) {
+        return d.interests2019;
+      }
+
+      ;
+      return d.interests;
+    });
+    var group = dimension.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
+
+    group.all = function () {
+      var newObject = [];
+
+      for (var key in this) {
+        if (this.hasOwnProperty(key) && key != "all") {
+          newObject.push({
+            key: key,
+            value: this[key]
+          });
+        }
+      }
+
+      return newObject;
+    };
+
+    var sizes = calcPieSize(charts.incomeType.divId);
+    chart.width(sizes.width).height(sizes.height).cy(sizes.cy).cap(5).innerRadius(sizes.innerRadius).radius(sizes.radius).group(group).dimension(dimension).valueAccessor(function (d) {
+      return d.value;
+    }).legend(dc.legend().x(0).y(sizes.legendY).gap(10).legendText(function (d) {
+      var thisKey = d.name;
+
+      if (thisKey.length > 40) {
+        return thisKey.substring(0, 40) + '...';
+      }
+
+      return thisKey;
+    })).title(function (d) {
+      var thisKey = d.key;
+      return thisKey + ': ' + d.value;
+    }).label(function (d) {
+      var percent = d.value / group.all().reduce(function (a, v) {
+        return a + v.value;
+      }, 0);
+      percent = percent * 100;
+      return percent.toFixed(1) + '%';
+    });
+    chart.render();
+    chart.filterHandler(function (dimension, filters) {
+      dimension.filter(null);
+      if (filters.length === 0) dimension.filter(null);else dimension.filterFunction(function (d) {
+        for (var i = 0; i < d.length; i++) {
+          if (filters.indexOf(d[i]['Income_type']) >= 0) return true;
+        }
+
+        return false;
+      });
+      RefreshTable();
+      return filters;
+    });
+  }; //CHART 1
+
+
+  var createOutsidePositionsChart = function createOutsidePositionsChart() {
+    var chart = charts.outsidePositions.chart;
+    var dimension = ndx.dimension(function (d) {
+      var interestsNum = d.OutsidePositionsNum;
+
+      if (vuedata.selectedYear == 2018) {
+        interestsNum = d.OutsidePositionsNum2018;
+      }
+
+      ;
+
+      if (vuedata.selectedYear == 2019) {
+        interestsNum = d.OutsidePositionsNum2019;
+      }
+
+      ;
+
+      if (interestsNum >= 10) {
+        return "10+";
+      }
+
+      ;
+      return interestsNum.toString();
+    });
+    var group = dimension.group().reduceSum(function (d) {
+      return 1;
+    });
+    var width = recalcWidth(charts.outsidePositions.divId);
+    chart.width(width).height(380).group(group).dimension(dimension).on("preRender", function (chart, filter) {}).margins({
+      top: 0,
+      right: 10,
+      bottom: 20,
+      left: 20
+    }) //.x(d3.scaleBand().domain(["2017", "2018", "2019"]))
+    //.x(d3.scaleLinear())
+    .x(d3.scaleBand().domain(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"])).xUnits(dc.units.ordinal).gap(10).elasticY(true); //.ordinalColors(vuedata.colors.default1)
+
+    chart.render();
+    chart.on('filtered', function (c) {
+      RefreshTable();
     });
   }; //CHART 3
 
@@ -47322,8 +47546,7 @@ for (var i = 0; i < 5; i++) {
           amt = 0;
         }
 
-        ; //console.log(val);
-
+        ;
         p[k] = (p[k] || 0) + amt; //increment counts
       });
       return p;
@@ -47349,8 +47572,7 @@ for (var i = 0; i < 5; i++) {
           amt = 0;
         }
 
-        ; //console.log(val);
-
+        ;
         p[k] = (p[k] || 0) - amt; //decrement counts
       });
       return p;
@@ -47439,48 +47661,24 @@ for (var i = 0; i < 5; i++) {
 
       ;
 
-      if (v <= 500) {
-        return "1-500";
-      }
-
-      ;
-
-      if (v <= 5000) {
-        return "501-5000";
-      }
-
-      ;
-
       if (v <= 10000) {
-        return "5001-10000";
+        return "€1-€10.000";
       }
 
       ;
 
       if (v <= 20000) {
-        return "10001-20000";
+        return "€10.001-€20.000";
       }
 
       ;
 
       if (v <= 30000) {
-        return "20001-30000";
+        return "€20.001-€30.000";
       }
 
       ;
-
-      if (v <= 40000) {
-        return "30001-40000";
-      }
-
-      ;
-
-      if (v <= 50000) {
-        return "40001-50000";
-      }
-
-      ;
-      return "50001+";
+      return "€30.000+";
     }
 
     var dimension = ndx.dimension(function (d) {
@@ -47508,7 +47706,7 @@ for (var i = 0; i < 5; i++) {
       left: 20
     }) //.x(d3.scaleBand().domain(["2017", "2018", "2019"]))
     //.x(d3.scaleLinear())
-    .x(d3.scaleBand().domain(["0", "1-500", "501-5000", "5001-10000", "10001-20000", "20001-30000", "30001-40000", "40001-50000", "50001+"])).xUnits(dc.units.ordinal).gap(10).elasticY(true); //.ordinalColors(vuedata.colors.default1)
+    .x(d3.scaleBand().domain(["0", "€1-€10.000", "€10.001-€20.000", "€20.001-€30.000", "€30.000+"])).xUnits(dc.units.ordinal).gap(10).elasticY(true); //.ordinalColors(vuedata.colors.default1)
 
     chart.render();
     chart.on('filtered', function (c) {
@@ -47527,53 +47725,21 @@ for (var i = 0; i < 5; i++) {
 
       ;
 
-      if (v <= 500) {
-        return "1-500";
-      }
-
-      ;
-
       if (v <= 5000) {
-        return "501-5000";
+        return "€1-€5.000";
       }
 
       ;
 
       if (v <= 10000) {
-        return "5001-10000";
+        return "€5.001-€10.000";
       }
 
       ;
-
-      if (v <= 20000) {
-        return "10001-20000";
-      }
-
-      ;
-
-      if (v <= 30000) {
-        return "20001-30000";
-      }
-
-      ;
-
-      if (v <= 40000) {
-        return "30001-40000";
-      }
-
-      ;
-
-      if (v <= 50000) {
-        return "40001-50000";
-      }
-
-      ;
-      return "50001+";
+      return "€10.000+";
     }
 
     var dimension = ndx.dimension(function (d) {
-      console.log("holding vals " + vuedata.selectedYear);
-
       if (vuedata.selectedYear == 2018) {
         return calcIncomeGroup(d.Holdings_tot2018);
       }
@@ -47598,7 +47764,7 @@ for (var i = 0; i < 5; i++) {
       left: 20
     }) //.x(d3.scaleBand().domain(["2017", "2018", "2019"]))
     //.x(d3.scaleLinear())
-    .x(d3.scaleBand().domain(["0", "1-500", "501-5000", "5001-10000", "10001-20000", "20001-30000", "30001-40000", "40001-50000", "50001+"])).xUnits(dc.units.ordinal).gap(10).elasticY(true); //.ordinalColors(vuedata.colors.default1)
+    .x(d3.scaleBand().domain(["0", "€1-€5.000", "€5.001-€10.000", "€10.000+"])).xUnits(dc.units.ordinal).gap(10).elasticY(true); //.ordinalColors(vuedata.colors.default1)
 
     chart.render();
     chart.on('filtered', function (c) {
@@ -47691,26 +47857,16 @@ for (var i = 0; i < 5; i++) {
   $('.year-btn').click(function () {
     $('.year-btn').removeClass('active');
     $(this).addClass('active');
-    console.log('clicked');
-
-    if ($(this).hasClass('y2018')) {
-      vuedata.selectedYear = 2018;
-    }
-
-    if ($(this).hasClass('y2019')) {
-      vuedata.selectedYear = 2019;
-    }
-
-    if ($(this).hasClass('yall')) {
-      vuedata.selectedYear = all;
-    }
-
-    console.log(vuedata.selectedYear);
+    var thisId = $(this).attr('id');
+    vuedata.selectedYear = thisId.replace('y', '');
+    createGroupsChart();
     createOutsidePositionsChart();
+    createIncomeTypeChart();
     createTopSectorsIncomeChart();
     createTopSectorsHoldingChart();
     createIncomeValueChart();
-    createHoldingValueChart(); //dc.redrawAll();
+    createHoldingValueChart();
+    drawCustomCounters(); //dc.redrawAll();
 
     RefreshTable();
   }); //REFRESH TABLE
@@ -47773,7 +47929,9 @@ for (var i = 0; i < 5; i++) {
   }); //Render charts
 
   createTable();
+  createGroupsChart();
   createOutsidePositionsChart();
+  createIncomeTypeChart();
   createTopSectorsIncomeChart();
   createTopSectorsHoldingChart();
   createIncomeValueChart();
@@ -47801,21 +47959,39 @@ for (var i = 0; i < 5; i++) {
     });
     var group = dim.group().reduce(function (p, d) {
       p.nb += 1;
+      var selectedInterests = d.interests;
+
+      if (vuedata.selectedYear == 2018) {
+        selectedInterests = d.interests2018;
+      }
+
+      if (vuedata.selectedYear == 2019) {
+        selectedInterests = d.interests2019;
+      }
 
       if (!d.Surname_name) {
         return p;
       }
 
-      p.interests += d.interests.length;
+      p.interests += selectedInterests.length;
       return p;
     }, function (p, d) {
       p.nb -= 1;
+      var selectedInterests = d.interests;
+
+      if (vuedata.selectedYear == 2018) {
+        selectedInterests = d.interests2018;
+      }
+
+      if (vuedata.selectedYear == 2019) {
+        selectedInterests = d.interests2019;
+      }
 
       if (!d.Surname_name) {
         return p;
       }
 
-      p.interests -= d.interests.length;
+      p.interests -= selectedInterests.length;
       return p;
     }, function (p, d) {
       return {
@@ -47878,7 +48054,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56672" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54935" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

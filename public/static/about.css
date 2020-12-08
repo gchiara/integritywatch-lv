@@ -445,31 +445,34 @@ div.dc-html-legend {
   height: 520px;
 }
 .chart-container.tab_b_1 {
-  height: 500px;
+  height: 520px;
 }
 .chart-container.tab_b_2 {
-  height: 500px;
+  height: 520px;
 }
 .chart-container.tab_b_3 {
-  height: 500px;
+  height: 520px;
 }
 .chart-container.tab_b_4 {
-  height: 480px;
+  height: 520px;
 }
 .chart-container.tab_b_5 {
-  height: 480px;
+  height: 500px;
 }
 .chart-container.tab_b_6 {
-  height: 470px;
+  height: 500px;
+}
+.chart-container.tab_b_7 {
+  height: 500px;
 }
 .chart-container.tab_c_1 {
-  height: 800px;
+  height: 680px;
 }
 .chart-container.tab_c_2 {
-  height: 470px;
+  height: 680px;
 }
 .chart-container.tab_c_3 {
-  height: 470px;
+  height: 680px;
 }
 @media only screen and (max-width: 767px) {
   .chart-container {
@@ -564,6 +567,11 @@ div.dc-html-legend {
     opacity: 0;
   }
 }
+@media only screen and (max-width: 768px) {
+  .footer-bar .footer-input {
+    display: none;
+  }
+}
 .footer-bar .footer-counts {
   color: #fff;
   fill: #fff;
@@ -623,6 +631,12 @@ div.dc-html-legend {
   cursor: pointer;
   background: #e25e6c;
   transition: all 0.4s;
+}
+@media only screen and (max-width: 768px) {
+  .footer-bar .reset-btn {
+    right: auto;
+    left: 15px;
+  }
 }
 .footer-bar .reset-btn:hover, .footer-bar .reset-btn:focus, .footer-bar .reset-btn.active {
   background: #d24e5c;
@@ -741,6 +755,10 @@ div.dc-html-legend {
 #detailsModal .details-line .details-line-title {
   font-weight: 600;
 }
+#detailsModal .details-line-title-table {
+  margin-top: 10px;
+  color: #154277;
+}
 #detailsModal .modal-activities-title {
   font-weight: 600;
   font-size: 20px;
@@ -777,10 +795,6 @@ div.dc-html-legend {
 .dc-chart .selected path, .dc-chart .selected circle {
   stroke: #fff;
   stroke-width: 5;
-}
-
-.pie-label {
-  display: none;
 }
 
 .dc-chart svg:not(:root) {
@@ -1100,15 +1114,55 @@ table.dataTable tbody tr:hover {
   border: none;
   padding: 5px 15px;
   border-radius: 3px;
+  margin-bottom: 5px;
 }
 .years-btn-container .year-btn.active, .years-btn-container .year-btn:hover {
   background: #154277;
 }
+.years-btn-container .year-btn:disabled {
+  background: #aaa !important;
+  cursor: default;
+}
 
 /* Mobile tables */
 @media only screen and (max-width: 768px) {
-  .tabA .chart-table td:nth-child(3), .tabA .chart-table td:nth-child(7), .tabA .chart-table td:nth-child(8), .tabA .chart-table th:nth-child(3), .tabA .chart-table th:nth-child(7), .tabA .chart-table th:nth-child(8) {
+  .tabA .chart-table td:nth-child(1), .tabA .chart-table td:nth-child(6), .tabA .chart-table th:nth-child(1), .tabA .chart-table th:nth-child(6) {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .tabB .chart-table td:nth-child(1), .tabB .chart-table td:nth-child(5), .tabB .chart-table td:nth-child(6), .tabB .chart-table th:nth-child(1), .tabB .chart-table th:nth-child(5), .tabB .chart-table th:nth-child(6) {
+    display: none;
+  }
+}
+
+/* SUB MENU BUTTONS */
+.section-btn-container {
+  text-align: left;
+}
+.section-btn-container .section-btn {
+  text-decoration: none;
+  cursor: pointer;
+  color: #fff;
+  background: #3695d8;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 3px;
+}
+.section-btn-container .section-btn.active, .section-btn-container .section-btn:hover {
+  background: #154277;
+}
+@media only screen and (max-width: 1199px) {
+  .section-btn-container .section-btn {
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 1080px) {
+  .section-btn-container .section-btn {
+    display: inline-block;
+    margin-bottom: 2px;
+    font-size: 14px;
   }
 }.container {
   padding: 30px 0;
@@ -1274,13 +1328,13 @@ table.dataTable tbody tr:hover {
   background: #fafafa;
 }
 .chart-header .chart-title[data-v-c13f10] {
-  font-size: 20px;
+  font-size: 18px;
   text-align: left;
   color: #020c10;
 }
 @media only screen and (max-width: 1400px) {
 .chart-header .chart-title[data-v-c13f10] {
-    font-size: 18px;
+    font-size: 16px;
 }
 }
 @media only screen and (max-width: 1250px) {
@@ -1290,7 +1344,7 @@ table.dataTable tbody tr:hover {
 }
 @media only screen and (max-width: 767px) {
 .chart-header .chart-title[data-v-c13f10] {
-    font-size: 20px;
+    font-size: 18px;
 }
 }
 .chart-header .chart-header-buttons[data-v-c13f10] {

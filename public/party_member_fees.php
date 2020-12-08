@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_a1.css">
+    <link rel="stylesheet" href="static/tab_a2.css">
 </head>
 <body>
     <div id="app" class="tabA">   
@@ -24,14 +24,14 @@
               <div class="col-md-8 chart-col">
                 <!-- SUBSECION MENU -->
                 <div class="section-btn-container">
-                  <a href="./" class="section-btn active">Privātie ziedojumi</a>
-                  <a href="./party_member_fees.php" class="section-btn">Biedru nauda</a>
+                  <a href="./" class="section-btn">Privātie ziedojumi</a>
+                  <a href="./party_member_fees.php" class="section-btn active">Biedru nauda</a>
                   <a href="./mp_donations.php" class="section-btn">Saeimas deputātu ziedojumi</a>
                   <a href="./party_expenditures.php" class="section-btn">Partiju izdevumi</a>
                 </div>
                 <div class="boxed-container description-container">
-                  <h1>Deputāti uz Delnas - Politisko partiju finansēšana - Privātie ziedojumi</h1>
-                  <p>Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par Latvijas politisko partiju privātajiem ziedojumiem. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt privatpersonu ziedojumus.</p>
+                  <h1>Deputāti uz Delnas - Politisko partiju finansēšana - Biedru nauda</h1>
+                  <p>Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par biedru naudām, kuras ir saņemtas no Latvijas politiskajām partijām. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt ziedojumus.</p>
                 </div>
               </div>
               <div class="col-md-4 chart-col">
@@ -54,13 +54,7 @@
               <div class="chart-inner" id="toprecipients_chart"></div>
             </div>
           </div>
-          <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_2">
-              <chart-header :title="charts.donationsType.title" :info="charts.donationsType.info" ></chart-header>
-              <div class="chart-inner" id="donationstype_chart"></div>
-            </div>
-          </div>
-          <div class="col-md-3 chart-col">
+          <div class="col-md-6 chart-col">
             <div class="boxed-container chart-container tab_a_2">
               <chart-header :title="charts.donationsPerYear.title" :info="charts.donationsPerYear.info" ></chart-header>
               <div class="chart-inner" id="donationsperyear_chart"></div>
@@ -82,9 +76,9 @@
                     <tr class="header">
                       <th class="header">Nr</th> 
                       <th class="header">Partija</th>
-                      <th class="header">Ziedojuma veids</th>
+                      <th class="header">Veids</th>
                       <th class="header">Vertība</th>
-                      <th class="header">Ziedotājs</th>
+                      <th class="header">Biedrs</th>
                       <th class="header">Datums</th>
                     </tr>
                   </thead>
@@ -101,7 +95,7 @@
             <!-- Modal Header -->
             <div class="modal-header">
               <div class="modal-title">
-                <div>{{ selectedElement['Dāvinātājs'] }} - {{ selectedElement['Vērtība'] }}</div>
+                <div>{{ selectedElement['Biedrs'] }} - {{ selectedElement['Vērtība'] }}</div>
               </div>
               <button type="button" class="close" data-dismiss="modal"><i class="material-icons">close</i></button>
             </div>
@@ -148,7 +142,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_a1.js"></script>
+    <script src="static/tab_a2.js"></script>
 
  
 </body>

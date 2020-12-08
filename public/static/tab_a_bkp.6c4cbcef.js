@@ -34401,12 +34401,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./..\\..\\public\\images\\dt\\sort_both.png":[["sort_both.023ba8a7.png","../public/images/dt/sort_both.png"],"../public/images/dt/sort_both.png"],"./..\\..\\public\\images\\dt\\sort_asc.png":[["sort_asc.aa549c26.png","../public/images/dt/sort_asc.png"],"../public/images/dt/sort_asc.png"],"./..\\..\\public\\images\\dt\\sort_desc.png":[["sort_desc.f71cc8be.png","../public/images/dt/sort_desc.png"],"../public/images/dt/sort_desc.png"],"./..\\..\\public\\images\\dt\\sort_asc_disabled.png":[["sort_asc_disabled.95d1b73a.png","../public/images/dt/sort_asc_disabled.png"],"../public/images/dt/sort_asc_disabled.png"],"./..\\..\\public\\images\\dt\\sort_desc_disabled.png":[["sort_desc_disabled.62f2c62a.png","../public/images/dt/sort_desc_disabled.png"],"../public/images/dt/sort_desc_disabled.png"],"_css_loader":"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"scss/about.scss":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/vue/dist/vue.esm.js":[function(require,module,exports) {
+},{"./..\\..\\public\\images\\dt\\sort_both.png":[["sort_both.023ba8a7.png","../public/images/dt/sort_both.png"],"../public/images/dt/sort_both.png"],"./..\\..\\public\\images\\dt\\sort_asc.png":[["sort_asc.aa549c26.png","../public/images/dt/sort_asc.png"],"../public/images/dt/sort_asc.png"],"./..\\..\\public\\images\\dt\\sort_desc.png":[["sort_desc.f71cc8be.png","../public/images/dt/sort_desc.png"],"../public/images/dt/sort_desc.png"],"./..\\..\\public\\images\\dt\\sort_asc_disabled.png":[["sort_asc_disabled.95d1b73a.png","../public/images/dt/sort_asc_disabled.png"],"../public/images/dt/sort_asc_disabled.png"],"./..\\..\\public\\images\\dt\\sort_desc_disabled.png":[["sort_desc_disabled.62f2c62a.png","../public/images/dt/sort_desc_disabled.png"],"../public/images/dt/sort_desc_disabled.png"],"_css_loader":"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/vue/dist/vue.esm.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -46724,7 +46719,7 @@ render._withStripped = true
       
       }
     })();
-},{"_css_loader":"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.esm.js"}],"about.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.esm.js"}],"tab_a_bkp.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -46743,8 +46738,6 @@ require("../public/vendor/css/dc.css");
 
 require("/scss/main.scss");
 
-require("/scss/about.scss");
-
 var _vue = _interopRequireDefault(require("vue"));
 
 var _Loader = _interopRequireDefault(require("./components/Loader.vue"));
@@ -46762,34 +46755,732 @@ require('datatables.net-dt')(window, $);
 
 window.underscore = _underscore.default;
 window._ = _underscore.default;
+// Data object - is also used by Vue
+var vuedata = {
+  page: 'tabA',
+  loader: true,
+  readMore: false,
+  showInfo: true,
+  showShare: true,
+  showAllCharts: true,
+  chartMargin: 40,
+  travelFilter: 'all',
+  charts: {
+    topRecipients: {
+      title: 'Top 10 saņēmēji',
+      info: ''
+    },
+    donationsPerYear: {
+      title: 'Ziedojumi gadā',
+      info: ''
+    },
+    topDonors: {
+      title: 'Top 10 donori',
+      info: ''
+    },
+    bubble: {
+      title: 'Bubble',
+      info: ''
+    },
+    donationsAmt: {
+      title: 'Ziedojumu skaits pēc ziedojuma summas',
+      info: ''
+    },
+    amtCategory: {
+      title: 'Ziedojumu skaits pēc ziedojuma summas',
+      info: ''
+    },
+    mainTable: {
+      chart: null,
+      type: 'table',
+      title: 'Table',
+      info: ''
+    }
+  },
+  selectedElement: {
+    "P": "",
+    "Sub": ""
+  },
+  modalShowTable: '',
+  colors: {
+    generic: ["#3b95d0", "#4081ae", "#406a95", "#395a75"],
+    default1: "#3695d8",
+    default2: "#449188"
+  } //Set vue components and Vue app
+
+};
 
 _vue.default.component('chart-header', _ChartHeader.default);
 
+_vue.default.component('loader', _Loader.default);
+
 new _vue.default({
   el: '#app',
+  data: vuedata,
   methods: {
-    getUrlParameter: function getUrlParameter(sParam) {
-      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-          sURLVariables = sPageURL.split('&'),
-          sParameterName,
-          i;
+    //Share
+    downloadDataset: function downloadDataset() {
+      window.open('./data/tab_a/finance.csv');
+    },
+    share: function share(platform) {
+      if (platform == 'twitter') {
+        var thisPage = window.location.href.split('?')[0];
+        var shareText = 'Share text here ' + thisPage;
+        var shareURL = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText);
+        window.open(shareURL, '_blank');
+        return;
+      }
 
-      for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-          return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
+      if (platform == 'facebook') {
+        var toShareUrl = 'https://integritywatch.lt';
+        var shareURL = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(toShareUrl);
+        window.open(shareURL, '_blank', 'toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250,top=300,left=300');
+        return;
       }
     }
+  }
+}); //Initialize info popovers
+
+$(function () {
+  $('[data-toggle="popover"]').popover();
+}); //Charts
+
+var charts = {
+  topRecipients: {
+    chart: dc.rowChart("#toprecipients_chart"),
+    type: 'row',
+    divId: 'toprecipients_chart'
   },
-  mounted: function mounted() {
-    if (this.getUrlParameter('section') == 4) {
-      $('#collapse4').addClass('show');
+  donationsPerYear: {
+    chart: dc.lineChart("#donationsperyear_chart"),
+    type: 'line',
+    divId: 'donationsperyear_chart'
+  },
+  topDonors: {
+    chart: dc.rowChart("#topdonors_chart"),
+    type: 'row',
+    divId: 'topdonors_chart'
+  },
+  bubble: {
+    chart: dc.bubbleChart("#bubble_chart"),
+    type: 'bubble',
+    divId: 'bubble_chart'
+  },
+  amtCategory: {
+    chart: dc.rowChart("#amtcategory_chart"),
+    type: 'row',
+    divId: 'amtcategory_chart'
+  },
+  mainTable: {
+    chart: null,
+    type: 'table',
+    divId: 'dc-data-table'
+  } //Functions for responsivness
+
+};
+
+var recalcWidth = function recalcWidth(divId) {
+  return document.getElementById(divId).offsetWidth - vuedata.chartMargin;
+};
+
+var recalcWidthWordcloud = function recalcWidthWordcloud() {
+  //Replace element if with wordcloud column id
+  var width = document.getElementById("party_chart").offsetWidth - vuedata.chartMargin * 2;
+  return [width, 550];
+};
+
+var recalcCharsLength = function recalcCharsLength(width) {
+  return parseInt(width / 8);
+};
+
+var calcPieSize = function calcPieSize(divId) {
+  var newWidth = recalcWidth(divId);
+  var sizes = {
+    'width': newWidth,
+    'height': 0,
+    'radius': 0,
+    'innerRadius': 0,
+    'cy': 0,
+    'legendY': 0
+  };
+
+  if (newWidth < 300) {
+    sizes.height = newWidth + 170;
+    sizes.radius = newWidth / 2;
+    sizes.innerRadius = newWidth / 4;
+    sizes.cy = newWidth / 2;
+    sizes.legendY = newWidth + 30;
+  } else {
+    sizes.height = newWidth * 0.75 + 170;
+    sizes.radius = newWidth * 0.75 / 2;
+    sizes.innerRadius = newWidth * 0.75 / 4;
+    sizes.cy = newWidth * 0.75 / 2;
+    sizes.legendY = newWidth * 0.75 + 30;
+  }
+
+  return sizes;
+};
+
+var resizeGraphs = function resizeGraphs() {
+  for (var c in charts) {
+    var sizes = calcPieSize(charts[c].divId);
+    var newWidth = recalcWidth(charts[c].divId);
+    var charsLength = recalcCharsLength(newWidth);
+
+    if (charts[c].type == 'row') {
+      charts[c].chart.width(newWidth);
+      charts[c].chart.label(function (d) {
+        var thisKey = d.key;
+
+        if (thisKey.indexOf('###') > -1) {
+          thisKey = thisKey.split('###')[0];
+        }
+
+        if (thisKey.length > charsLength) {
+          return thisKey.substring(0, charsLength) + '...';
+        }
+
+        return thisKey;
+      });
+      charts[c].chart.redraw();
+    } else if (charts[c].type == 'bar') {
+      charts[c].chart.width(newWidth);
+      charts[c].chart.rescale();
+      charts[c].chart.redraw();
+    } else if (charts[c].type == 'line') {
+      charts[c].chart.width(newWidth);
+      charts[c].chart.rescale();
+      charts[c].chart.redraw();
+    } else if (charts[c].type == 'pie') {
+      charts[c].chart.width(sizes.width).height(sizes.height).cy(sizes.cy).innerRadius(sizes.innerRadius).radius(sizes.radius).legend(dc.legend().x(0).y(sizes.legendY).gap(10).legendText(function (d) {
+        var thisKey = d.name;
+
+        if (thisKey.length > charsLength) {
+          return thisKey.substring(0, charsLength) + '...';
+        }
+
+        return thisKey;
+      }));
+      charts[c].chart.redraw();
+    } else if (charts[c].type == 'cloud') {
+      charts[c].chart.size(recalcWidthWordcloud());
+      charts[c].chart.redraw();
     }
   }
+}; //Add commas to thousands
+
+
+function addcommas(x) {
+  if (parseInt(x)) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  return x;
+} //Custom date order for dataTables
+
+
+var dmy = d3.timeParse("%d/%m/%Y");
+jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+  "date-eu-pre": function dateEuPre(date) {
+    if (date.indexOf("Cancelled") > -1) {
+      date = date.split(" ")[0];
+    }
+
+    return dmy(date);
+  },
+  "date-eu-asc": function dateEuAsc(a, b) {
+    return a < b ? -1 : a > b ? 1 : 0;
+  },
+  "date-eu-desc": function dateEuDesc(a, b) {
+    return a < b ? 1 : a > b ? -1 : 0;
+  }
+}); //Generate random parameter for dynamic dataset loading (to avoid caching)
+
+var randomPar = '';
+var randomCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+for (var i = 0; i < 5; i++) {
+  randomPar += randomCharacters.charAt(Math.floor(Math.random() * randomCharacters.length));
+} //Load data and generate charts
+
+
+(0, _d3Request.csv)('./data/tab_a/finance.csv?' + randomPar, function (err, finance) {
+  //Loop through data to aply fixes and calculations
+  var totDonors = 0; //Loop through data to apply fixes
+
+  _.each(finance, function (d) {
+    //Convert amount to float
+    if (d.Vērtība.indexOf("EUR ") > -1) {
+      d.donationAmt = parseFloat(d.Vērtība.replace("EUR ", "")).toFixed(2);
+    } else {
+      d.donationAmt = d.Vērtība.replace(".", "");
+      d.donationAmt = d.donationAmt.replace(" €", "");
+      d.donationAmt = parseFloat(d.donationAmt.replace(",", ".")).toFixed(2);
+    } //Define amount categories
+
+
+    d.amtCat = "N/A";
+
+    if (d.donationAmt < 0) {
+      d.amtCat = "negatīvi ziedojumi";
+    } else if (d.donationAmt < 1000) {
+      d.amtCat = "0—1000";
+    } else if (d.donationAmt < 2500) {
+      d.amtCat = "1000—2500";
+    } else if (d.donationAmt < 5000) {
+      d.amtCat = "2500—5000";
+    } else if (d.donationAmt < 7500) {
+      d.amtCat = "5000—7500";
+    } else if (d.donationAmt < 9500) {
+      d.amtCat = "7500—9500";
+    } else if (d.donationAmt >= 9500) {
+      d.amtCat = "9500 +";
+    }
+  }); //Set totals for custom counters
+
+
+  $('.count-box-donors .total-count').html(totDonors); //Set dc main vars. The second crossfilter is used to handle the travels stacked bar chart.
+
+  var ndx = crossfilter(finance);
+  var searchDimension = ndx.dimension(function (d) {
+    var entryString = d['Partija'] + ' ' + d['Dāvinātājs'] + ' ' + d['Year'];
+    return entryString.toLowerCase();
+  }); //CHART 1
+
+  var createTopRecipientsChart = function createTopRecipientsChart() {
+    var chart = charts.topRecipients.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d['Partija'];
+    });
+    var group = dimension.group().reduceSum(function (d) {
+      return d.donationAmt;
+    });
+
+    var filteredGroup = function (source_group) {
+      return {
+        all: function all() {
+          return source_group.top(10).filter(function (d) {
+            return d.value != 0;
+          });
+        }
+      };
+    }(group);
+
+    var width = recalcWidth(charts.topRecipients.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(420).margins({
+      top: 0,
+      left: 0,
+      right: 10,
+      bottom: 20
+    }).group(filteredGroup).dimension(dimension).colorCalculator(function (d, i) {
+      return vuedata.colors.default1;
+    }).label(function (d) {
+      if (d.key && d.key.length > charsLength) {
+        return d.key.substring(0, charsLength) + '...';
+      }
+
+      return d.key;
+    }).title(function (d) {
+      return d.key + ': ' + d.value.toFixed(2);
+    }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
+
+    chart.render();
+  }; //CHART 2
+
+
+  var createDonationsPerYearChart = function createDonationsPerYearChart() {
+    var chart = charts.donationsPerYear.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d['Year'];
+    });
+    var group = dimension.group().reduceSum(function (d) {
+      return d.donationAmt;
+    });
+    var width = recalcWidth(charts.donationsPerYear.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(430).margins({
+      top: 10,
+      left: 30,
+      right: 0,
+      bottom: 20
+    }).group(group).dimension(dimension).x(d3.scaleBand()).xUnits(dc.units.ordinal).brushOn(true).xAxisLabel('').yAxisLabel('').renderHorizontalGridLines(true) //.xUnits(d3.timeMonths)
+    .elasticY(true).elasticX(false).title(function (d) {
+      return d.key + ': ' + d.value.toFixed(2);
+    });
+    chart.render();
+  }; //CHART 3
+
+
+  var createTopDonorsChart = function createTopDonorsChart() {
+    var chart = charts.topDonors.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d['Dāvinātājs'];
+    });
+    var group = dimension.group().reduceSum(function (d) {
+      return d.donationAmt;
+    });
+
+    var filteredGroup = function (source_group) {
+      return {
+        all: function all() {
+          return source_group.top(10).filter(function (d) {
+            return d.value != 0;
+          });
+        }
+      };
+    }(group);
+
+    var width = recalcWidth(charts.topDonors.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(420).margins({
+      top: 0,
+      left: 0,
+      right: 10,
+      bottom: 20
+    }).group(filteredGroup).dimension(dimension).colorCalculator(function (d, i) {
+      return vuedata.colors.default1;
+    }).label(function (d) {
+      if (d.key && d.key.length > charsLength) {
+        return d.key.substring(0, charsLength) + '...';
+      }
+
+      return d.key;
+    }).title(function (d) {
+      return d.key + ': ' + d.value.toFixed(2);
+    }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
+
+    chart.render();
+  }; //CHART 4
+
+
+  var createBubbleChart = function createBubbleChart() {
+    var chart = charts.bubble.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d['Partija'];
+    });
+    var group = dimension.group().reduce(function (p, d) {
+      ++p.count;
+      p.totalAmtDonated += parseFloat(d.donationAmt);
+      p.avgAmtDonated = p.totalAmtDonated / p.count;
+
+      if (p.donors[d['Dāvinātājs']]) {
+        p.donors[d['Dāvinātājs']]++;
+      } else {
+        p.donors[d['Dāvinātājs']] = 1;
+        p.donorsNum++;
+      }
+
+      return p;
+    }, function (p, d) {
+      --p.count;
+      p.totalAmtDonated -= parseFloat(d.donationAmt);
+      p.avgAmtDonated = p.count ? p.totalAmtDonated / p.count : 0;
+
+      if (p.donors[d['Dāvinātājs']] && p.donors[d['Dāvinātājs']] > 1) {
+        p.donors[d['Dāvinātājs']]--;
+      } else if (p.donors[d['Dāvinātājs']] == 1) {
+        p.donors[d['Dāvinātājs']] = 0;
+        p.donorsNum--;
+      }
+
+      return p;
+    }, function (p, d) {
+      return {
+        count: 0,
+        totalAmtDonated: 0,
+        avgAmtDonated: 0,
+        donors: {},
+        donorsNum: 0
+      };
+    });
+    var width = recalcWidth(charts.bubble.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(520).margins({
+      top: 0,
+      left: 35,
+      right: 10,
+      bottom: 35
+    }).group(group).dimension(dimension).colorCalculator(function (d, i) {
+      return vuedata.colors.default1;
+    }).title(function (d) {
+      //console.log(d.key);
+      //console.log(d.value);
+      return d.key;
+    }) // `.colorAccessor` - the returned value will be passed to the `.colors()` scale to determine a fill color
+    //.colorAccessor(function(d) {return d.value.absGain})
+    // `.keyAccessor` - the `X` value will be passed to the `.x()` scale to determine pixel location
+    .keyAccessor(function (d) {
+      return d.value.donorsNum;
+    }) // `.valueAccessor` - the `Y` value will be passed to the `.y()` scale to determine pixel location
+    .valueAccessor(function (d) {
+      return d.value.avgAmtDonated;
+    }) // `.radiusValueAccessor` - the value will be passed to the `.r()` scale to determine radius size;
+    //   by default this maps linearly to [0,100]
+    .radiusValueAccessor(function (d) {
+      return d.value.totalAmtDonated;
+    }).maxBubbleRelativeSize(0.2).minRadius(5).x(d3.scaleLinear().domain([0, 100])).y(d3.scaleLinear().domain([-1000, 5000])).r(d3.scaleLinear().domain([-10000, 4000000])).yAxisPadding(30).xAxisPadding(10).xAxisLabel('Donors').yAxisLabel('Avg donation').elasticY(true).elasticX(true); //.xAxis().ticks(4);
+    //chart.xAxis().tickFormat(numberFormat);
+
+    chart.render();
+  }; //CHART 5
+
+
+  var createAmtCategoryChart = function createAmtCategoryChart() {
+    var chart = charts.amtCategory.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d.amtCat;
+    });
+    var group = dimension.group().reduceSum(function (d) {
+      return 1;
+    });
+    var order = ['negatīvi ziedojumi', '0—1000', '1000—2500', '2500—5000', '5000—7500', '7500—9500', '9500 +', 'N/A'];
+    var width = recalcWidth(charts.amtCategory.divId);
+    var charsLength = recalcCharsLength(width);
+    chart.width(width).height(490).margins({
+      top: 0,
+      left: 0,
+      right: 10,
+      bottom: 20
+    }).group(group).dimension(dimension).colorCalculator(function (d, i) {
+      return vuedata.colors.default1;
+    }).label(function (d) {
+      if (d.key && d.key.length > charsLength) {
+        return d.key.substring(0, charsLength) + '...';
+      }
+
+      return d.key;
+    }).title(function (d) {
+      return d.key + ': ' + d.value.toFixed(2);
+    }).ordering(function (d) {
+      return order.indexOf(d.key);
+    }).elasticX(true).xAxis().ticks(4); //chart.xAxis().tickFormat(numberFormat);
+
+    chart.render();
+  }; //TABLE
+
+
+  var createTable = function createTable() {
+    var count = 0;
+    charts.mainTable.chart = $("#dc-data-table").dataTable({
+      "columnDefs": [{
+        "searchable": false,
+        "orderable": false,
+        "targets": 0,
+        data: function data(row, type, val, meta) {
+          return count;
+        }
+      }, {
+        "searchable": false,
+        "orderable": true,
+        "targets": 1,
+        "defaultContent": "N/A",
+        "data": function data(d) {
+          return d['Partija'];
+        }
+      }, {
+        "searchable": false,
+        "orderable": true,
+        "targets": 2,
+        "defaultContent": "N/A",
+        "data": function data(d) {
+          return d['Veids'];
+        }
+      }, {
+        "searchable": false,
+        "orderable": true,
+        "targets": 3,
+        "defaultContent": "N/A",
+        "data": function data(d) {
+          return d['Vērtība'];
+        }
+      }, {
+        "searchable": false,
+        "orderable": true,
+        "targets": 4,
+        "defaultContent": "N/A",
+        "data": function data(d) {
+          return d['Dāvinātājs'];
+        }
+      }, {
+        "searchable": false,
+        "orderable": true,
+        "targets": 5,
+        "defaultContent": "N/A",
+        "data": function data(d) {
+          return d['Datums'];
+        }
+      }],
+      "iDisplayLength": 25,
+      "bPaginate": true,
+      "bLengthChange": true,
+      "bFilter": false,
+      "order": [[1, "desc"]],
+      "bSort": true,
+      "bInfo": true,
+      "bAutoWidth": false,
+      "bDeferRender": true,
+      "aaData": searchDimension.top(Infinity),
+      "bDestroy": true
+    });
+    var datatable = charts.mainTable.chart;
+    datatable.on('draw.dt', function () {
+      var PageInfo = $('#dc-data-table').DataTable().page.info();
+      datatable.DataTable().column(0, {
+        page: 'current'
+      }).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1 + PageInfo.start;
+      });
+    });
+    datatable.DataTable().draw();
+    $('#dc-data-table tbody').on('click', 'tr', function () {
+      var data = datatable.DataTable().row(this).data();
+      vuedata.selectedElement = data;
+      $('#detailsModal').modal();
+    });
+  }; //REFRESH TABLE
+
+
+  function RefreshTable() {
+    dc.events.trigger(function () {
+      var alldata = searchDimension.top(Infinity);
+      charts.mainTable.chart.fnClearTable();
+      charts.mainTable.chart.fnAddData(alldata);
+      charts.mainTable.chart.fnDraw();
+    });
+  } //SEARCH INPUT FUNCTIONALITY
+
+
+  var typingTimer;
+  var doneTypingInterval = 1000;
+  var $input = $("#search-input");
+  $input.on('keyup', function () {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(doneTyping, doneTypingInterval);
+  });
+  $input.on('keydown', function () {
+    clearTimeout(typingTimer);
+  });
+
+  function doneTyping() {
+    var s = $input.val().toLowerCase();
+    searchDimension.filter(function (d) {
+      return d.indexOf(s) !== -1;
+    });
+    throttle();
+    var throttleTimer;
+
+    function throttle() {
+      window.clearTimeout(throttleTimer);
+      throttleTimer = window.setTimeout(function () {
+        dc.redrawAll();
+        RefreshTable();
+      }, 250);
+    }
+  } //Reset charts
+
+
+  var resetGraphs = function resetGraphs() {
+    for (var c in charts) {
+      if (charts[c].type !== 'table' && charts[c].chart.hasFilter()) {
+        charts[c].chart.filterAll();
+      }
+    }
+
+    searchDimension.filter(null);
+    $('#search-input').val('');
+    dc.redrawAll();
+    RefreshTable();
+  };
+
+  $('.reset-btn').click(function () {
+    resetGraphs();
+  }); //Render charts
+
+  createTable();
+  createTopRecipientsChart();
+  createDonationsPerYearChart();
+  createTopDonorsChart();
+  createAmtCategoryChart();
+  createBubbleChart();
+  $('.dataTables_wrapper').append($('.dataTables_length')); //Hide loader
+
+  vuedata.loader = false; //COUNTERS
+  //Main counter
+
+  /*
+  var all = ndx.groupAll();
+  var counter = dc.dataCount('.dc-data-count')
+    .dimension(ndx)
+    .group(all);
+  counter.render();
+  //Update datatables
+  counter.on("renderlet.resetall", function(c) {
+    RefreshTable();
+  });
+  */
+  //Custom counters
+
+  function drawCustomCounters() {
+    var dim = ndx.dimension(function (d) {
+      if (!d['Dāvinātājs']) {
+        return "";
+      } else {
+        return d['Dāvinātājs'];
+      }
+    });
+    var group = dim.group().reduce(function (p, d) {
+      p.nb += 1;
+
+      if (!d['Dāvinātājs']) {
+        return p;
+      }
+
+      p.donors += 1;
+      return p;
+    }, function (p, d) {
+      p.nb -= 1;
+
+      if (!d['Dāvinātājs']) {
+        return p;
+      }
+
+      p.donors -= 1;
+      return p;
+    }, function (p, d) {
+      return {
+        nb: 0,
+        donors: 0
+      };
+    });
+    group.order(function (p) {
+      return p.nb;
+    });
+    var donors = 0;
+    var counter = dc.dataCount(".count-box-donors").dimension(group).group({
+      value: function value() {
+        donors = 0;
+        return group.all().filter(function (kv) {
+          if (kv.value.nb > 0) {
+            donors += +kv.value.donors;
+          }
+
+          return kv.value.nb > 0;
+        }).length;
+      }
+    }).renderlet(function (chart) {
+      $(".nbdonors").text(donors);
+    });
+    counter.render();
+  }
+
+  drawCustomCounters(); //Window resize function
+
+  window.onresize = function (event) {
+    resizeGraphs();
+  };
 });
-},{"jquery":"../node_modules/jquery/dist/jquery.js","datatables.net":"../node_modules/datatables.net/js/jquery.dataTables.js","datatables.net-dt":"../node_modules/datatables.net-dt/js/dataTables.dataTables.js","underscore":"../node_modules/underscore/underscore.js","../public/vendor/js/popper.min.js":"../public/vendor/js/popper.min.js","../public/vendor/js/bootstrap.min.js":"../public/vendor/js/bootstrap.min.js","d3-request":"../node_modules/d3-request/index.js","../public/vendor/css/bootstrap.min.css":"../public/vendor/css/bootstrap.min.css","../public/vendor/css/dc.css":"../public/vendor/css/dc.css","/scss/main.scss":"scss/main.scss","/scss/about.scss":"scss/about.scss","vue":"../node_modules/vue/dist/vue.esm.js","./components/Loader.vue":"components/Loader.vue","./components/ChartHeader.vue":"components/ChartHeader.vue"}],"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","datatables.net":"../node_modules/datatables.net/js/jquery.dataTables.js","datatables.net-dt":"../node_modules/datatables.net-dt/js/dataTables.dataTables.js","underscore":"../node_modules/underscore/underscore.js","../public/vendor/js/popper.min.js":"../public/vendor/js/popper.min.js","../public/vendor/js/bootstrap.min.js":"../public/vendor/js/bootstrap.min.js","d3-request":"../node_modules/d3-request/index.js","../public/vendor/css/bootstrap.min.css":"../public/vendor/css/bootstrap.min.css","../public/vendor/css/dc.css":"../public/vendor/css/dc.css","/scss/main.scss":"scss/main.scss","vue":"../node_modules/vue/dist/vue.esm.js","./components/Loader.vue":"components/Loader.vue","./components/ChartHeader.vue":"components/ChartHeader.vue"}],"C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -46817,7 +47508,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54935" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65213" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -46992,4 +47683,4 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","about.js"], null)
+},{}]},{},["C:/Users/ElaineG/AppData/Local/Yarn/config/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","tab_a_bkp.js"], null)

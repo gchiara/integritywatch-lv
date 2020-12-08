@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_a1.css">
+    <link rel="stylesheet" href="static/tab_a3.css">
 </head>
 <body>
     <div id="app" class="tabA">   
@@ -24,14 +24,14 @@
               <div class="col-md-8 chart-col">
                 <!-- SUBSECION MENU -->
                 <div class="section-btn-container">
-                  <a href="./" class="section-btn active">Privātie ziedojumi</a>
+                  <a href="./" class="section-btn">Privātie ziedojumi</a>
                   <a href="./party_member_fees.php" class="section-btn">Biedru nauda</a>
-                  <a href="./mp_donations.php" class="section-btn">Saeimas deputātu ziedojumi</a>
+                  <a href="./mp_donations.php" class="section-btn active">Saeimas deputātu ziedojumi</a>
                   <a href="./party_expenditures.php" class="section-btn">Partiju izdevumi</a>
                 </div>
                 <div class="boxed-container description-container">
-                  <h1>Deputāti uz Delnas - Politisko partiju finansēšana - Privātie ziedojumi</h1>
-                  <p>Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par Latvijas politisko partiju privātajiem ziedojumiem. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt privatpersonu ziedojumus.</p>
+                  <h1>Deputati Uz Delnas - Politisko partiju finansēšana - Saeimas deputātu ziedojumi un biedru naudas maksājumi</h1>
+                  <p>Šī ir lietotājam draudzīga datu bāze, kas piedāva gūt ieskatu Saeimas deputātu privātajos ziedojumos un biedru naudās, kas veikti politiskajām partijām. Uzejot uz infografika vai saraksta zemāk lietotājs var sarindot, atlasīt un filtret ziedojumus.</p>
                 </div>
               </div>
               <div class="col-md-4 chart-col">
@@ -49,9 +49,9 @@
           </div>
           <!-- CHARTS FIRST ROW -->
           <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_1">
-              <chart-header :title="charts.topRecipients.title" :info="charts.topRecipients.info" ></chart-header>
-              <div class="chart-inner" id="toprecipients_chart"></div>
+            <div class="boxed-container chart-container tab_a_3">
+              <chart-header :title="charts.groups.title" :info="charts.groups.info" ></chart-header>
+              <div class="chart-inner" id="groups_chart"></div>
             </div>
           </div>
           <div class="col-md-3 chart-col">
@@ -61,15 +61,15 @@
             </div>
           </div>
           <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_2">
-              <chart-header :title="charts.donationsPerYear.title" :info="charts.donationsPerYear.info" ></chart-header>
-              <div class="chart-inner" id="donationsperyear_chart"></div>
+            <div class="boxed-container chart-container tab_a_1">
+              <chart-header :title="charts.topRecipients.title" :info="charts.topRecipients.info" ></chart-header>
+              <div class="chart-inner" id="toprecipients_chart"></div>
             </div>
           </div>
           <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_3">
-              <chart-header :title="charts.topDonors.title" :info="charts.topDonors.info" ></chart-header>
-              <div class="chart-inner" id="topdonors_chart"></div>
+            <div class="boxed-container chart-container tab_a_2">
+              <chart-header :title="charts.donationsPerYear.title" :info="charts.donationsPerYear.info" ></chart-header>
+              <div class="chart-inner" id="donationsperyear_chart"></div>
             </div>
           </div>
           <!-- TABLE -->
@@ -81,11 +81,12 @@
                   <thead>
                     <tr class="header">
                       <th class="header">Nr</th> 
-                      <th class="header">Partija</th>
-                      <th class="header">Ziedojuma veids</th>
+                      <th class="header">Deputāts</th>
+                      <th class="header">Frakcija</th>
+                      <th class="header">Veids</th>
                       <th class="header">Vertība</th>
-                      <th class="header">Ziedotājs</th>
-                      <th class="header">Datums</th>
+                      <th class="header">Saņēmējs</th>
+                      <th class="header">Datum</th>
                     </tr>
                   </thead>
                 </table>
@@ -148,7 +149,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_a1.js"></script>
+    <script src="static/tab_a3.js"></script>
 
  
 </body>

@@ -6,7 +6,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a href="./" class="nav-link" :class="{active: page == 'tabA'}">Partiju finanšu</a>
+        <a href="./" class="nav-link" :class="{active: section == 'tabA'}">Politisko partiju finansēšana</a>
       </li>
       <li class="nav-item">
         <a href="./declarations.php" class="nav-link" :class="{active: page == 'tabB'}">Deklarācijas</a>
@@ -27,9 +27,6 @@
       </li>
       <li class="nav-item">
         <a href="./about.php" class="nav-link">Par Integrity Watch</a>
-      </li>
-      <li class="nav-item">
-        <i class="material-icons nav-link icon-btn info-btn" @click="showInfo = !showInfo">info</i>
       </li>
     </ul>
   </div>
