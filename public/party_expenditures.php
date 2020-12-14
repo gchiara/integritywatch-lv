@@ -21,7 +21,7 @@
           <div class="col-md-12">
             <div class="row">
               <!-- INFO -->
-              <div class="col-md-8 chart-col">
+              <div class="col-lg-8 chart-col">
                 <!-- SUBSECION MENU -->
                 <div class="section-btn-container">
                   <a href="./" class="section-btn">Privātie ziedojumi</a>
@@ -34,14 +34,18 @@
                   <p>Ši ir lietotājam draudzīga datu bāze, kas piedāvā gūt ieskatu 20 lielāko Latvijas politisko partiju izdevumos. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt vai filtrēt politisko partiju izdevumus.</p>
                 </div>
               </div>
-              <div class="col-md-4 chart-col">
+              <div class="col-lg-4 chart-col">
+                <div class="data-source-box">
+                  <div class="data-source-title">Datu avots:</div>
+                  <a href="https://www.knab.gov.lv/lv/db/declaration/" target="_blank">https://www.knab.gov.lv/lv/db/declaration/</a>
+                </div>
                 <div class="boxed-container chart-container">
                   <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
                   <div class="years-btn-container">
                     <button class="year-btn" id="y2018" :disabled="dataYears.indexOf('2018') == -1">2018</button>
                     <button class="year-btn" id="y2019" :disabled="dataYears.indexOf('2019') == -1">2019</button>
                     <button class="year-btn" id="y2020" :disabled="dataYears.indexOf('2020') == -1">2020</button>
-                    <button class="year-btn active" id="yall">All years</button>
+                    <button class="year-btn active" id="yall">Visi gadi</button>
                   </div>
                 </div>
               </div>
@@ -78,7 +82,7 @@
                       <th class="header">Partija</th>
                       <th class="header">Gads</th>
                       <th class="header">Idevuma veids</th>
-                      <th class="header">Vertība</th>
+                      <th class="header">Vērtība</th>
                     </tr>
                   </thead>
                 </table>
@@ -117,6 +121,9 @@
           <div class="footer-col col-12 col-sm-12 footer-counts">
             <div class="dc-data-count count-box">
               <div class="filter-count">0</div>no <strong class="total-count">0</strong> entries
+            </div>
+            <div class="count-box count-box-vertiba">
+              <div class="filter-count nbvertiba">0</div>no <strong class="total-count-vertiba">0</strong> vērtība
             </div>
             <div class="footer-input">
               <input type="text" id="search-input" placeholder="Meklēt">

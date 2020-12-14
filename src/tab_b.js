@@ -35,16 +35,16 @@ var vuedata = {
   chartMargin: 40,
   selectedYear: 'all',
   charts: {
+    yearsFilter: {
+      title: 'Gadi',
+      info: ''
+    },
     groups: {
       title: 'Frakcijas',
       info: 'Infografiks rāda Saeimas frakciju deklarētās vērtības vairākās kategorijās: a) amati privātajā sektorā, nevalstiskajā sektorā un akadēmiskajā jomā; b) akcijas un kapitāldaļās privātos uzņēmumos; c) ieņēmumi, kas gūti privātajā sektorā, nevalstiskaja sektorā un akadēmiskajās iestādēs.'
     },
-    yearsFilter: {
-      title: 'Years filter',
-      info: ''
-    },
     outsidePositions: {
-      title: 'Deputātu skaits pēc arēju amatu skaita',
+      title: 'Deputātu skaits pēc ārējo amatu skaita',
       info: 'Infografikā ir redzams deputātu sadalījums pēc ārējo amatu skaita'
     },
     topSectorsIncome: {
@@ -52,25 +52,25 @@ var vuedata = {
       info: 'Infografikā ir redzamas 10 ekonomikas nozares, no kurām Saeimas deputāti gūst lielākos ārējos ienākumus.'
     },
     incomeType: {
-      title: 'Ārēja ienākuma veids',
+      title: 'Ārējā ienākuma veids',
       info: 'Infografikā ir redzama dažādu ārējo ienākumu kopējā vērtībā.'
     },
     topSectorsHolding: {
-      title: 'Akciju un kapitāļa daļu vertība - Top 10 ekonomikas nozarēs',
+      title: 'Akciju un Kapitāldaļu vērtība - Top 10 ekonomikas nozarēs',
       info: 'Infografikā ir redzamas 10 ekonomikas nozares, kurās Saeimas deputātiem pieder visvairāk akcijas vai kapitāldaļas privātos uzņēmumos.'
     },
     incomeValues: {
-      title: 'Deputātu skaits pēc arēja ienakuma vertības',
+      title: 'Deputātu skaits pēc Ārējo ienakumu vērtības',
       info: 'Infografikā ir redzams deputātu sadalījums dažādās ārējo ienākumu vērtību skalās'
     },
     holdingValues: {
-      title: 'Deputātu skaits pēc akciju un kapitāļa daļu vertības',
+      title: 'Deputātu skaits pēc akciju un Kapitāldaļu vērtības',
       info: 'Infografikā ir redzams deputātu sadalījums pēc dažādām akciju un kapitāldaļu vērtību skalām. '
     },
     mainTable: {
       chart: null,
       type: 'table',
-      title: 'Table',
+      title: 'Deputātu ārējo interešu pārskats',
       info: ''
     }
   },
@@ -96,7 +96,7 @@ new Vue({
   methods: {
     //Share
     downloadDataset: function () {
-      window.open('./data/tab_a/finance.csv');
+      window.open('./data/tab_b/interests_and_assets.csv');
     },
     share: function (platform) {
       if(platform == 'twitter'){
@@ -129,7 +129,7 @@ new Vue({
       if(!el.interests) {
         return [];
       }
-      var allowedTypes = ['Income | Private', 'Income | Academia', 'Income | Foreign Institution', 'Income | Self-employment'];
+      var allowedTypes = ['Income | Private Sector', 'Income | Private', 'Income | Academia', 'Income | Foreign Institution', 'Income | Self-employment'];
       return _.filter(el.interests, function(i){ return allowedTypes.indexOf(i.Interest_Type) > -1 });
     }
   }
@@ -256,6 +256,7 @@ var resizeGraphs = function() {
         .radius(sizes.radius)
         .legend(dc.legend().x(0).y(sizes.legendY).gap(10).legendText(function(d) { 
           var thisKey = d.name;
+          if(thisKey == 'Others') {thisKey = 'Citi'}
           if(thisKey.length > charsLength){
             return thisKey.substring(0, charsLength) + '...';
           }
@@ -268,7 +269,34 @@ var resizeGraphs = function() {
     }
   }
 };
+//Remove diacritics
+function slugify(str) {
+  var map = {
+      '-' : ' ',
+      'a' : 'ā|á|à|ã|â|À|Á|Ã|Â',
+      'e' : 'ē|é|è|ê|É|È|Ê',
+      'i' : 'ī|í|ì|î|Í|Ì|Î',
+      'o' : 'ó|ò|ô|õ|Ó|Ò|Ô|Õ',
+      'u' : 'ū|ú|ù|û|ü|Ú|Ù|Û|Ü',
+      'c' : 'č|ç|Ç',
+      'n' : 'ņ|ñ|Ñ',
+      'S' : 'Š',
+      's' : 'š',
+      'z' : 'ž',
+      'Z' : 'Ž',
+      'G' : 'Ģ',
+      'g' : 'ģ',
+      'C' : 'Č',
+      'A' : 'Ā',
+      'l' : 'ļ',
+      'k' : 'ķ'
 
+  };
+  for (var pattern in map) {
+      str = str.replace(new RegExp(map[pattern], 'g'), pattern);
+  };
+  return str;
+};
 //Add commas to thousands
 function addcommas(x){
   if(parseInt(x)){
@@ -302,6 +330,17 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
   }
 });
 
+//Get URL parameters
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 //Generate random parameter for dynamic dataset loading (to avoid caching)
 var randomPar = '';
 var randomCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -310,6 +349,14 @@ for ( var i = 0; i < 5; i++ ) {
 }
 //Load data and generate charts
 csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) => {
+  //Set year and pre-filter the data accordingly
+  if(getParameterByName('year')) {
+    vuedata.selectedYear = getParameterByName('year');
+  } else {
+    vuedata.selectedYear = '2019';
+  }
+  $("#y"+vuedata.selectedYear).addClass('active');
+  declarations = _.filter(declarations, function(i){ return i.DeclYear.trim() == vuedata.selectedYear; });
   var mps = [];
   var totInterests = 0;
   //Loop through data to aply fixes and calculations
@@ -320,6 +367,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     d.Income_value = cleanCurrencyValue(d.Income_value);
     //Check if mp already exisits in mps array
     var thisMp = _.find(mps, function(mp){ return mp.Surname_name == d.Surname_name; });
+    var lastName = d.Surname_name.split(',')[0].trim();
     if(!thisMp) {
       //If MP not yet added, add it
       var newMp = {
@@ -330,17 +378,13 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
         Committees: d.Committees,
         Frakcija: d.Frakcija,
         OutsidePositionsNum: 0,
-        OutsidePositionsNum2018: 0,
-        OutsidePositionsNum2019: 0,
         Income_tot: 0,
-        Income_tot2018: 0,
-        Income_tot2019: 0,
         Holdings_tot: 0,
-        Holdings_tot2018: 0,
-        Holdings_tot2019: 0,
         interests: [],
-        interests2018: [],
-        interests2019: []
+        photoUrl: 'images/photos/'+slugify(lastName)+'.gif'
+      }
+      if(d.Surname_name == "Klementjevs, Ivans") {
+        newMp.photoUrl = 'images/photos/Klementjevs_I.gif';
       }
       mps.push(newMp);
       thisMp = _.find(mps, function(mp){ return mp.Surname_name == d.Surname_name; });
@@ -373,30 +417,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       if(d.Fin_v_value) {
         thisMp.Holdings_tot += parseFloat(d.Fin_v_value);
       }
-      if(d.DeclYear == 2018) {
-        thisMp.interests2018.push(thisInterest);
-        if(thisInterest.Interest_Type.indexOf("Position") > -1) {
-          thisMp.OutsidePositionsNum2018 ++;
-        }
-        if(d.Income_value) {
-          thisMp.Income_tot2018 += parseFloat(d.Income_value);
-        }
-        if(d.Fin_v_value) {
-          thisMp.Holdings_tot2018 += parseFloat(d.Fin_v_value);
-        }
-      }
-      if(d.DeclYear == 2019) {
-        thisMp.interests2019.push(thisInterest);
-        if(thisInterest.Interest_Type.indexOf("Position") > -1) {
-          thisMp.OutsidePositionsNum2019 ++;
-        }
-        if(d.Income_value) {
-          thisMp.Income_tot2019 += parseFloat(d.Income_value);
-        }
-        if(d.Fin_v_value) {
-          thisMp.Holdings_tot2019 += parseFloat(d.Fin_v_value);
-        }
-      }
   });
   //Set totals for custom counters
   $('.count-box-interests .total-count2').html(totInterests);
@@ -416,8 +436,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       return d['Frakcija'];
     });
     var group = dimension.group().reduceSum(function (d) {
-      if(vuedata.selectedYear == 2018) { return d.interests2018.length; };
-      if(vuedata.selectedYear == 2019) { return d.interests2019.length; };
       return d.interests.length;
     });
     var filteredGroup = (function(source_group) {
@@ -459,8 +477,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
   var createTopSectorsIncomeChart = function() {
     function reduceAdd(p, v) {
       var interestsArray = v.interests;
-      if(vuedata.selectedYear == 2018) { interestsArray = v.interests2018; }
-      if(vuedata.selectedYear == 2019) { interestsArray = v.interests2019; }
       //if (v.interests[0] === "") return p;    // skip empty values
       interestsArray.forEach (function(val, idx) {
         var k = val['NACE_1'];
@@ -472,8 +488,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     function reduceRemove(p, v) {
       var interestsArray = v.interests;
-      if(vuedata.selectedYear == 2018) { interestsArray = v.interests2018; }
-      if(vuedata.selectedYear == 2019) { interestsArray = v.interests2019; }
       //if (v.interests[0] === "") return p;    // skip empty values
       interestsArray.forEach (function(val, idx) {
         var k = val['NACE_1'];
@@ -488,8 +502,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     var chart = charts.topSectorsIncome.chart;
     var dimension = ndx.dimension(function(d){ 
-      if(vuedata.selectedYear == 2018) { return d.interests2018; };
-      if(vuedata.selectedYear == 2019) { return d.interests2019; };
       return d.interests;
     });
     var group = dimension.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
@@ -519,12 +531,14 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
         return vuedata.colors.default1;
       })
       .label(function (d) {
+          if(d.key == 'Others') {d.key = 'Citi'}
           if(d.key && d.key.length > charsLength){
             return d.key.substring(0,charsLength) + '...';
           }
           return d.key;
       })
       .title(function (d) {
+        if(d.key == 'Others') {d.key = 'Citi'}
         return d.key + ': ' + d.value.toFixed(2);
       })
       .elasticX(true)
@@ -550,8 +564,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
   var createIncomeTypeChart = function() {
     function reduceAdd(p, v) {
       var interestsArray = v.interests;
-      if(vuedata.selectedYear == 2018) { interestsArray = v.interests2018; }
-      if(vuedata.selectedYear == 2019) { interestsArray = v.interests2019; }
       interestsArray.forEach (function(val, idx) {
         var k = val['Income_type'];
         var amt = parseFloat(val.Income_value);
@@ -562,8 +574,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     function reduceRemove(p, v) {
       var interestsArray = v.interests;
-      if(vuedata.selectedYear == 2018) { interestsArray = v.interests2018; }
-      if(vuedata.selectedYear == 2019) { interestsArray = v.interests2019; }
       interestsArray.forEach (function(val, idx) {
         var k = val['Income_type'];
         var amt = parseFloat(val.Income_value);
@@ -577,8 +587,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     var chart = charts.incomeType.chart;
     var dimension = ndx.dimension(function(d){ 
-      if(vuedata.selectedYear == 2018) { return d.interests2018; };
-      if(vuedata.selectedYear == 2019) { return d.interests2019; };
       return d.interests;
     });
     var group = dimension.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
@@ -607,12 +615,14 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       .valueAccessor(function(d) { return d.value; })
       .legend(dc.legend().x(0).y(sizes.legendY).gap(10).legendText(function(d) { 
         var thisKey = d.name;
+        if(thisKey == 'Others') {thisKey = 'Citi'}
         if(thisKey.length > 40){
           return thisKey.substring(0,40) + '...';
         }
         return thisKey;
       }))
       .title(function(d){
+        if(d.key == 'Others') {d.key = 'Citi'}
         var thisKey = d.key;
         return thisKey + ': ' + d.value;
       })
@@ -643,8 +653,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     var chart = charts.outsidePositions.chart;
     var dimension = ndx.dimension(function (d) {
       var interestsNum = d.OutsidePositionsNum;
-      if(vuedata.selectedYear == 2018) { interestsNum = d.OutsidePositionsNum2018; };
-      if(vuedata.selectedYear == 2019) { interestsNum = d.OutsidePositionsNum2019; };
       if(interestsNum >= 10) { return "10+"};
       return interestsNum.toString();
     });
@@ -678,9 +686,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     //return d.Fin_v_value;
     function reduceAdd(p, v) {
       var interestsArray = v.interests;
-      if(vuedata.selectedYear == 2018) { interestsArray = v.interests2018; }
-      if(vuedata.selectedYear == 2019) { interestsArray = v.interests2019; }
-      //if (v.interests[0] === "") return p;    // skip empty values
       interestsArray.forEach (function(val, idx) {
         var k = val['NACE_1'];
         var amt = parseFloat(val.Fin_v_value);
@@ -691,9 +696,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     function reduceRemove(p, v) {
       var interestsArray = v.interests;
-      if(vuedata.selectedYear == 2018) { interestsArray = v.interests2018; }
-      if(vuedata.selectedYear == 2019) { interestsArray = v.interests2019; }
-      //if (v.interests[0] === "") return p;    // skip empty values
       interestsArray.forEach (function(val, idx) {
         var k = val['NACE_1'];
         var amt = parseFloat(val.Fin_v_value);
@@ -708,8 +710,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     var chart = charts.topSectorsHolding.chart;
     var dimension = ndx.dimension(function(d){ 
-      if(vuedata.selectedYear == 2018) { return d.interests2018; };
-      if(vuedata.selectedYear == 2019) { return d.interests2019; };
       return d.interests;
     });
     var group = dimension.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
@@ -739,17 +739,18 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
         return vuedata.colors.default1;
       })
       .label(function (d) {
-          if(d.key && d.key.length > charsLength){
-            return d.key.substring(0,charsLength) + '...';
-          }
-          return d.key;
+        if(d.key == 'Others') {d.key = 'Citi'}
+        if(d.key && d.key.length > charsLength){
+          return d.key.substring(0,charsLength) + '...';
+        }
+        return d.key;
       })
       .title(function (d) {
-          return d.key + ': ' + d.value.toFixed(2);
+        if(d.key == 'Others') {d.key = 'Citi'}
+        return d.key + ': ' + d.value.toFixed(2);
       })
       .elasticX(true)
       .xAxis().ticks(4);
-      //chart.xAxis().tickFormat(numberFormat);
       chart.render();
       chart.filterHandler (function (dimension, filters) {
         dimension.filter(null);   
@@ -778,8 +779,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       return "€30.000+";
     }
     var dimension = ndx.dimension(function (d) {
-      if(vuedata.selectedYear == 2018) { return calcIncomeGroup(d.Income_tot2018); };
-      if(vuedata.selectedYear == 2019) { return calcIncomeGroup(d.Income_tot2019); };
       return calcIncomeGroup(d.Income_tot);
     });
     var group = dimension.group().reduceSum(function (d) {
@@ -817,8 +816,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       return "€10.000+";
     }
     var dimension = ndx.dimension(function (d) {
-      if(vuedata.selectedYear == 2018) { return calcIncomeGroup(d.Holdings_tot2018); };
-      if(vuedata.selectedYear == 2019) { return calcIncomeGroup(d.Holdings_tot2019); };
       return calcIncomeGroup(d.Holdings_tot);
     });
     var group = dimension.group().reduceSum(function (d) {
@@ -893,7 +890,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
           "targets": 4,
           "defaultContent":"N/A",
           "data": function(d) {
-            return "€ " + d.Income_tot.toFixed(2);
+            return "€ " + d.Holdings_tot.toFixed(2);
           }
         },
         {
@@ -902,7 +899,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
           "targets": 5,
           "defaultContent":"N/A",
           "data": function(d) {
-            return "€ " + d.Holdings_tot.toFixed(2);
+            return "€ " + d.Income_tot.toFixed(2);
           }
         }
       ],
@@ -933,24 +930,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       $('#detailsModal').modal();
     });
   }
-
-  //YEARS FILTERS
-  $('.year-btn').click(function(){
-    $('.year-btn').removeClass('active');
-    $(this).addClass('active');
-    var thisId = $(this).attr('id');
-    vuedata.selectedYear = thisId.replace('y','');
-    createGroupsChart();
-    createOutsidePositionsChart();
-    createIncomeTypeChart();
-    createTopSectorsIncomeChart();
-    createTopSectorsHoldingChart();
-    createIncomeValueChart();
-    createHoldingValueChart();
-    drawCustomCounters();
-    //dc.redrawAll();
-    RefreshTable();
-  });
 
   //REFRESH TABLE
   function RefreshTable() {
@@ -1048,8 +1027,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       function(p,d) {  
         p.nb +=1;
         var selectedInterests = d.interests;
-        if(vuedata.selectedYear == 2018) { selectedInterests = d.interests2018; }
-        if(vuedata.selectedYear == 2019) { selectedInterests = d.interests2019; }
         if (!d.Surname_name) {
           return p;
         }
@@ -1059,8 +1036,6 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       function(p,d) {  
         p.nb -=1;
         var selectedInterests = d.interests;
-        if(vuedata.selectedYear == 2018) { selectedInterests = d.interests2018; }
-        if(vuedata.selectedYear == 2019) { selectedInterests = d.interests2019; }
         if (!d.Surname_name) {
           return p;
         }

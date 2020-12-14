@@ -37,11 +37,11 @@ var vuedata = {
   dataYears: [],
   charts: {
     yearsFilter: {
-      title: 'Years filter',
+      title: 'Gadi',
       info: ''
     },
     topSpenders: {
-      title: 'Top 10 tērētāji',
+      title: 'Top 20 tērētāji',
       info: 'Infografikā ir redzamas 10 politiskās partijas, kas ir deklarējušas  vislielākos izdevumus izvēlētajā periodā.'
     },
     expendituresType: {
@@ -55,7 +55,7 @@ var vuedata = {
     mainTable: {
       chart: null,
       type: 'table',
-      title: 'Table',
+      title: 'Politisko partiju izdevumi',
       info: ''
     }
   },
@@ -81,7 +81,7 @@ new Vue({
   methods: {
     //Share
     downloadDataset: function () {
-      window.open('./data/tab_a/finance.csv');
+      window.open('./data/tab_a/a4.csv');
     },
     share: function (platform) {
       if(platform == 'twitter'){
@@ -238,6 +238,18 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
       return ((a < b) ? 1 : ((a > b) ? -1 : 0));
   }
 });
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+  "euro-amount-pre": function (amt) {
+    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("€ ","").replace(",",""));
+    return cleanAmt;
+  },
+  "euro-amount-asc": function ( a, b ) {
+      return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+  },
+  "euro-amount-desc": function ( a, b ) {
+      return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+  }
+});
 
 //Generate random parameter for dynamic dataset loading (to avoid caching)
 var randomPar = '';
@@ -249,21 +261,15 @@ for ( var i = 0; i < 5; i++ ) {
 csv('./data/tab_a/a4.csv?' + randomPar, (err, finance) => {
   //Loop through data to aply fixes and calculations
   var totDonors = 0;
+  var totVertiba = 0;
   //Loop through data to apply fixes
   _.each(finance, function (d) {
     if(vuedata.dataYears.indexOf(d.Gads) == -1) {
       vuedata.dataYears.push(d.Gads);
     }
     //Convert amount to float
-    d.Vertība = d.Vertība.trim();
-    if(d.Vertība.indexOf("EUR ") > -1) {
-      d.donationAmt = parseFloat(d.Vertība.replace("EUR ", "")).toFixed(2);
-    } else {
-      d.donationAmt = d.Vertība.replace(".", "");
-      d.donationAmt = d.donationAmt.replace(" €", "");
-      d.donationAmt = d.donationAmt.replace("€ ", "");
-      d.donationAmt = parseFloat(d.donationAmt.replace(",", ".")).toFixed(2);
-    }
+    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("€ ","").replace(",","")).toFixed(2);
+    totVertiba += parseFloat(d.donationAmt);
     //Define amount categories
     d.amtCat = "N/A";
     if(d.donationAmt < 0) { d.amtCat = "negatīvi ziedojumi" }
@@ -275,7 +281,7 @@ csv('./data/tab_a/a4.csv?' + randomPar, (err, finance) => {
     else if(d.donationAmt >= 9500) { d.amtCat = "9500 +" }
   });
   //Set totals for custom counters
-  $('.count-box-donors .total-count').html(totDonors);
+  $('.total-count-vertiba').html(addcommas(totVertiba.toFixed(0)));
 
   //Set dc main vars. The second crossfilter is used to handle the travels stacked bar chart.
   var ndx = crossfilter(finance);
@@ -492,7 +498,7 @@ csv('./data/tab_a/a4.csv?' + randomPar, (err, finance) => {
           "targets": 4,
           "defaultContent":"N/A",
           "data": function(d) {
-            return d['Vertība'];
+            return d['Vērtība'];
           }
         }
       ],
@@ -621,59 +627,55 @@ csv('./data/tab_a/a4.csv?' + randomPar, (err, finance) => {
     RefreshTable();
   });
 
-  /*
   //Custom counters
   function drawCustomCounters() {
     var dim = ndx.dimension (function(d) {
-      if (!d['Dāvinātājs']) {
+      if (!d.id) {
         return "";
       } else {
-        return d['Dāvinātājs'];
+        return d.id;
       }
     });
     var group = dim.group().reduce(
       function(p,d) {  
         p.nb +=1;
-        if (!d['Dāvinātājs']) {
+        if (!d.donationAmt) {
           return p;
         }
-        p.donors += 1;
+        p.valueAmt += parseFloat(d.donationAmt);
         return p;
       },
       function(p,d) {  
         p.nb -=1;
-        if (!d['Dāvinātājs']) {
+        if (!d.donationAmt) {
           return p;
         }
-        p.donors -= 1;
+        p.valueAmt -= parseFloat(d.donationAmt);
         return p;
       },
       function(p,d) {  
-        return {nb: 0, donors: 0}; 
+        return {nb: 0, valueAmt: 0}; 
       }
     );
     group.order(function(p){ return p.nb });
-    var donors = 0;
-    var counter = dc.dataCount(".count-box-donors")
+    var valueAmt = 0;
+    var counter = dc.dataCount(".count-box-vertiba")
     .dimension(group)
     .group({value: function() {
-      donors = 0;
+      valueAmt = 0;
       return group.all().filter(function(kv) {
         if (kv.value.nb >0) {
-          donors += +kv.value.donors;
+          valueAmt += +kv.value.valueAmt;
         }
         return kv.value.nb > 0; 
       }).length;
     }})
     .renderlet(function (chart) {
-      $(".nbdonors").text(donors);
+      $(".nbvertiba").text('€ ' + addcommas(valueAmt.toFixed(0)));
     });
     counter.render();
   }
-  */
-  //drawCustomCounters();
-  
-
+  drawCustomCounters();
 
   //Window resize function
   window.onresize = function(event) {

@@ -46668,21 +46668,23 @@ exports.default = _default;
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "chart-header-buttons col-3" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary btn-info",
-          attrs: {
-            type: "button",
-            "data-container": "body",
-            "data-toggle": "popover",
-            "data-html": "true",
-            "data-placement": "bottom",
-            "data-content": _vm.info
-          }
-        },
-        [_vm._v("\n      i\n    ")]
-      )
+      _vm.info && _vm.info !== ""
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-secondary btn-info",
+              attrs: {
+                type: "button",
+                "data-container": "body",
+                "data-toggle": "popover",
+                "data-html": "true",
+                "data-placement": "bottom",
+                "data-content": _vm.info
+              }
+            },
+            [_vm._v("\n      i\n    ")]
+          )
+        : _vm._e()
     ])
   ])
 }
@@ -47508,7 +47510,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54935" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50558" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

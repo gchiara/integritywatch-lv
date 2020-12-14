@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" id="iw-nav">
-  <a class="navbar-brand" href="https://transparency.eu/" target="_blank"><img src="./images/delna-logo.png" alt="" /> </a>
+<nav class="navbar navbar-expand-lg navbar-light" id="iw-nav">
+  <a class="navbar-brand" href="https://delna.lv/lv/" target="_blank"><img src="./images/delna_logo.png" alt="" /> </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -26,8 +26,9 @@
         </div>
       </li>
       <li class="nav-item">
-        <a href="./about.php" class="nav-link">Par Integrity Watch</a>
+        <a href="./about.php" class="nav-link">Par projektu</a>
       </li>
     </ul>
+    <a class="navbar-brand navbar-brand2" href="https://delna.lv/lv/" target="_blank"><img src="./images/ti_logo.png" alt="" /></a>
   </div>
 </nav>

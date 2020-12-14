@@ -21,19 +21,26 @@
           <div class="col-md-12">
             <div class="row">
               <!-- INFO -->
-              <div class="col-md-8 chart-col">
+              <div class="col-lg-8 chart-col">
                 <div class="boxed-container description-container">
                   <h1>Deputāti uz Delnas - Deputātu deklarācijas</h1>
                   <p>Šī ir lietotājam draudzīga datu bāze, kas sniedz ieskatu Saeimas deputātu deklarētajās ārējās interesēs. Uzejot uz infografika vai saraksta zemāk, lietotajs var sarindot, atlasīt un filtrēt deklarētās vērtības.</p>
+                  <p class="data-source-text">
+                    <strong>Datu avots: </strong>
+                    <a href="https://www6.vid.gov.lv/VAD" target="_blank">https://www6.vid.gov.lv/VAD</a>, 
+                    <a href="http://www.saeima.lv/" target="_blank">http://www.saeima.lv/</a>, 
+                    <a href="http://www.lursoft.lv/" target="_blank">http://www.lursoft.lv/</a><br />
+                    <strong>Attēlu avots: </strong>
+                    <a href="http://www.saeima.lv/" target="_blank">http://www.saeima.lv/</a>
+                  </p>
                 </div>
               </div>
-              <div class="col-md-4 chart-col">
+              <div class="col-lg-4 chart-col">
                 <div class="boxed-container chart-container">
                   <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
                   <div class="years-btn-container">
-                    <button class="year-btn" id="y2018">2018</button>
-                    <button class="year-btn" id="y2019">2019</button>
-                    <button class="year-btn yall active" id="yall">All years</button>
+                    <a class="year-btn" href="./declarations.php?year=2018" id="y2018">2018</a>
+                    <a class="year-btn" href="./declarations.php?year=2019" id="y2019">2019</a>
                   </div>
                 </div>
               </div>
@@ -93,9 +100,9 @@
                       <th class="header">Nr</th> 
                       <th class="header">Deputāts</th>
                       <th class="header">Frakcija</th>
-                      <th class="header">Arēju amatu skaits</th>
-                      <th class="header">Akciju un kapitāļu daļu kopējā vertība</th>
-                      <th class="header">Ārēju ienākumu kopējā vertība</th>
+                      <th class="header">Ārējo amatu skaits</th>
+                      <th class="header">Akciju un Kapitāldaļu kopējā Vērtība</th>
+                      <th class="header">Ārējo ienākumu kopējā Vērtība</th>
                     </tr>
                   </thead>
                 </table>
@@ -119,13 +126,18 @@
             <div class="modal-body">
               <div class="container">
                 <div class="row">
-                  <div class="col-md-12">
-                  <div class="details-line"><span class="details-line-title">Deputāta mandāta statusa: </span> {{ selectedElement.Mandate_status }}</div>
+                  <div class="col-md-8">
+                    <div class="details-line"><span class="details-line-title">Deputāta mandāta statusa: </span> {{ selectedElement.Mandate_status }}</div>
                     <div class="details-line" v-if="selectedElement.Frakcija"><span class="details-line-title">Frakcija: </span> {{ selectedElement.Frakcija }}</div>
                     <div class="details-line" v-if="selectedElement.DeclYear"><span class="details-line-title">Deklarācijas gads: </span> {{ selectedElement.DeclYear }}</div>
                     <div class="details-line" v-if="selectedElement.filed_as"><span class="details-line-title">Deklarācija izsniegta kā: </span> {{ selectedElement.filed_as }}</div>
                     <div class="details-line" v-if="selectedElement.Committees"><span class="details-line-title">Saeimas komisijas deklarācijas gadā </span> {{ selectedElement.Committees }}</div>
                     <div class="details-line details-line-title-table"><span class="details-line-title">A) Amati privātā sektorā, pilsoniskās sabiedrības un akademikās iestādes</span></div>
+                  </div>
+                  <div class="col-md-4">
+                    <img :src="selectedElement.photoUrl" />
+                  </div>
+                  <div class="col-md-12">
                     <table class="interests-table" v-if="interestType1(selectedElement).length > 0">
                       <thead>
                         <tr>
