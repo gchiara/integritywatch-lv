@@ -109,7 +109,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col-md-12">
-                    Lorem Ipsum
+                    /
                   </div>
                 </div>
               </div>
