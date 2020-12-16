@@ -6,6 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>IW LV</title>
     <!-- Add twitter and og meta here -->
+    <meta property="og:url" content="http://deputatiuzdelnas.lv/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Deputāti uz Delnas - Politisko partiju finansēšana - Privātie ziedojumi" />
+    <meta property="og:description" content="Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par Latvijas politisko partiju privātajiem ziedojumiem. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt privatpersonu ziedojumus." />
+    <meta property="og:image" content="http://deputatiuzdelnas.lv/images/thumbnail.png" />
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

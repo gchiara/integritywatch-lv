@@ -6,6 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>IW LV</title>
     <!-- Add twitter and og meta here -->
+    <meta property="og:url" content="http://deputatiuzdelnas.lv/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Deputāti uz Delnas - Deputātu deklarācijas" />
+    <meta property="og:description" content="Šī ir lietotājam draudzīga datu bāze, kas sniedz ieskatu Saeimas deputātu deklarētajās ārējās interesēs. Uzejot uz infografika vai saraksta zemāk, lietotajs var sarindot, atlasīt un filtrēt deklarētās vērtības." />
+    <meta property="og:image" content="http://deputatiuzdelnas.lv/images/thumbnail.png" />
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -132,7 +137,7 @@
                     <div class="details-line" v-if="selectedElement.DeclYear"><span class="details-line-title">Deklarācijas gads: </span> {{ selectedElement.DeclYear }}</div>
                     <div class="details-line" v-if="selectedElement.filed_as"><span class="details-line-title">Deklarācija izsniegta kā: </span> {{ selectedElement.filed_as }}</div>
                     <div class="details-line" v-if="selectedElement.Committees"><span class="details-line-title">Saeimas komisijas deklarācijas gadā </span> {{ selectedElement.Committees }}</div>
-                    <div class="details-line details-line-title-table"><span class="details-line-title">A) Amati privātā sektorā, pilsoniskās sabiedrības un akademikās iestādes</span></div>
+                    <div class="details-line details-line-title-table"><span class="details-line-title">A) Amati privātajā sektorā, pilsoniskās sabiedribas un akadēmiskajās iestādēs</span></div>
                   </div>
                   <div class="col-md-4">
                     <img :src="selectedElement.photoUrl" />
@@ -157,7 +162,7 @@
                       </tbody>
                     </table>
                     <div style="text-align:left;" v-else>/</div>
-                    <div class="details-line details-line-title-table"><span class="details-line-title">B) Akcijas un kapitāla daļas komērcsabiedrībās</span></div>
+                    <div class="details-line details-line-title-table"><span class="details-line-title">B) Akcijas un kapitāldaļas komercsabiedrībās</span></div>
                     <table class="interests-table" v-if="interestType2(selectedElement).length > 0">
                       <thead>
                         <tr>
@@ -179,7 +184,7 @@
                       </tbody>
                     </table>
                     <div style="text-align:left;" v-else>/</div>
-                    <div class="details-line details-line-title-table"><span class="details-line-title">C) Arējie ienākumi </span></div>
+                    <div class="details-line details-line-title-table"><span class="details-line-title">C) Ārējie ienākumi</span></div>
                     <table class="interests-table" v-if="interestType3(selectedElement).length > 0">
                       <thead>
                         <tr>

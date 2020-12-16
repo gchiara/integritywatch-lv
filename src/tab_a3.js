@@ -96,7 +96,7 @@ new Vue({
         return;
       }
       if(platform == 'facebook'){
-        var toShareUrl = 'https://integritywatch.lt';
+        var toShareUrl = window.location.href.split('?')[0];
         var shareURL = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(toShareUrl);
         window.open(shareURL, '_blank', 'toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250,top=300,left=300');
         return;
@@ -249,7 +249,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 });
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
   "euro-amount-pre": function (amt) {
-    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("€ ","").replace(",",""));
+    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",",""));
     return cleanAmt;
   },
   "euro-amount-asc": function ( a, b ) {
@@ -282,7 +282,7 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
       vuedata.dataYears.push(d.Year);
     }
     //Convert amount to float
-    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("€ ","").replace(",","")).toFixed(2);
+    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",","")).toFixed(2);
     totVertiba += parseFloat(d.donationAmt);
     //Define amount categories
     d.amtCat = "N/A";
