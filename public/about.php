@@ -34,10 +34,11 @@
                 </ul>
                 <p>Paralēli šim, Delna arī izstrādā “Saeimas deputātu datu bāzi”, kurā lietotāji varēs iegūt datus un informāciju par konkrētu deputātu. Delna plāno arī publicēt jaunus datus un izveidot jaunas sadaļas atbilstoši lietotāju atsauksmēm un datu pieejamībai.</p> 
                 <p>Rīkā ietvertās vizualizācijas ir pilnībā interaktīvas. Noklikšķinot uz konkrētiem diagrammas elementiem vai datiem, pārējā informācija automātiski pielāgojas lietotāja izvēlei. Tehnoloģiskos risinājumus rīkam (D3.js) izstrādāja <i>New York Times</i> ar mērķi vienkāršot un sabiedrībai padarīt pieejamas sarežģītas datu kopas.</p>  
-                <p>Pēc Delnas pieprasījuma rīkā izmantotās datu kopas ir pieejamas mašīnlasāmā un lietotājam draudzīgā formātā (skatiet kontaktinformāciju zemāk).</p>
+                <p>Šo projektu finansē Eiropas Savienības Iekšējās drošības fonds – Policija. Saturs atspoguļo tikai autoru viedokli un ir tikai viņu atbildība. Eiropas Komisija neuzņemas nekādu atbildību par publikācijā ietvertās informācijas izmantošanu.</p>
                 <div class="about-eu-funding">
                   <img class="logo" src="./images/flag_yellow_low.jpg" />
-                  <p style="font-family: Arial">This online platform was funded by the European Union’s Internal Security Fund – Police</p>
+                  <p style="font-family: Arial">Šo projektu līdzfinansēja un atbalstīja Kultūras ministrija</p>
+                  <img class="about-logo2" src="./images/about-logo2.png" />
                 </div>
                 <p>Website design and development:<br />
                 <a href="http://www.chiaragirardelli.net">Chiara Girardelli</a><br /></p>
