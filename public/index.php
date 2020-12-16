@@ -133,10 +133,10 @@
         <div class="row">
           <div class="footer-col col-12 col-sm-12 footer-counts">
             <div class="dc-data-count count-box">
-              <div class="filter-count">0</div>no <strong class="total-count">0</strong> entries
+              <div class="filter-count">0</div>no <strong class="total-count">0</strong> ziedojumiem
             </div>
             <div class="count-box count-box-vertiba">
-              <div class="filter-count nbvertiba">0</div>no <strong class="total-count-vertiba">0</strong> vērtība
+              <div class="filter-count nbvertiba">0</div>no <strong class="total-count-vertiba">0</strong>
             </div>
             <div class="footer-input">
               <input type="text" id="search-input" placeholder="Meklēt">
@@ -153,7 +153,7 @@
         </div>
       </div>
       <!-- Loader -->
-      <loader v-if="loader" :text="'Loading ...'" />
+      <loader v-if="loader" :text="'Notiek ielāde ...'" />
     </div>
 
     <script type="text/javascript" src="vendor/js/d3.v5.min.js"></script>

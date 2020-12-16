@@ -218,10 +218,10 @@
         <div class="row">
           <div class="footer-col col-12 col-sm-12 footer-counts">
             <div class="dc-data-count count-box">
-              <div class="filter-count">0</div>of <strong class="total-count">0</strong> Mps
+              <div class="filter-count">0</div>no <strong class="total-count">0</strong> deputātiem
             </div>
             <div class="count-box count-box-interests">
-              <div class="filter-count nbinterests">0</div>of <strong class="total-count2">0</strong> interests
+              <div class="filter-count nbinterests">0</div>no <strong class="total-count2">0</strong> interesēm
             </div>
             <div class="footer-input">
               <input type="text" id="search-input" placeholder="Meklēt">
@@ -238,7 +238,7 @@
         </div>
       </div>
       <!-- Loader -->
-      <loader v-if="loader" :text="'Loading ...'" />
+      <loader v-if="loader" :text="'Notiek ielāde ...'" />
     </div>
 
     <script type="text/javascript" src="vendor/js/d3.v5.min.js"></script>
