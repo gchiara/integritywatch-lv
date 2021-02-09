@@ -18,11 +18,16 @@
         Citas versijas
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="https://www.integritywatch.eu/" target="_blank">EU</a>
-          <a class="dropdown-item" href="https://www.integritywatch.fr/" target="_blank">France</a>
-          <a class="dropdown-item" href="https://openaccess.transparency.org.uk/" target="_blank">United Kingdom</a>
-          <a class="dropdown-item" href="https://integritywatch.cl/" target="_blank">Chile</a>
-          <a class="dropdown-item" href="https://www.soldiepolitica.it/" target="_blank">Italy</a>
+          <a class="dropdown-item" href="https://www.integritywatch.eu/" target="_blank">Eiropas Savienība</a>
+			<a class="dropdown-item" href="https://www.integritywatch.fr/" target="_blank">Francija</a>
+			<a class="dropdown-item" href="https://www.integritywatch.gr/" target="_blank">Grieķija</a>
+			<a class="dropdown-item" href="http://www.soldiepolitica.it/" target="_blank">Itālija</a>
+			<a class="dropdown-item" href="https://manoseimas.lt/" target="_blank">Lietuva</a>
+			<a class="dropdown-item" href="https://www.integritywatch.nl/" target="_blank">Nīderlande</a>
+			<a class="dropdown-item" href="http://varuhintegritete.transparency.si/" target="_blank">Slovēnija</a>
+			<a class="dropdown-item" href="https://integritywatch.es/" target="_blank">Spānija</a>
+			<a class="dropdown-item" href="https://openaccess.transparency.org.uk/" target="_blank">Apvienotā Karaliste</a>
+			<a class="dropdown-item" href="https://integritywatch.cl/" target="_blank">Čīle</a>
         </div>
       </li>
       <li class="nav-item">
