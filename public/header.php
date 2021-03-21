@@ -11,6 +11,9 @@
       <li class="nav-item">
         <a href="./declarations.php" class="nav-link" :class="{active: page == 'tabB'}">Deklarācijas</a>
       </li>
+      <li class="nav-item">
+        <a href="./mps.php" class="nav-link" :class="{active: page == 'tabB2'}">MPs</a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">

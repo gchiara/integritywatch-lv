@@ -971,3 +971,113 @@ table.dataTable tbody tr:hover {
   }
 }
 
+
+//MP BOXES
+.mp-boxes-container {
+  padding: 10px 20px;
+}
+.mp-box {
+  padding: 15px;
+}
+.boxes-pagination-container {
+  margin: 20px auto 30px auto;
+  .page-item.active .page-link {
+    background-color: #740d09;
+    border-color: #740d09;
+  }
+}
+.mp-box-inner {
+  background: #f6f7f8;
+  border-radius: 2px;
+  padding: 10px;
+  text-align: left;
+  border: 2px solid #f5f6f7;
+  cursor: pointer;
+  min-height: 130px;
+  &:hover {
+    background: #fff;
+    border: 2px solid #740d09;
+  }
+  //box-shadow: 2px 2px 2px rgb(0 0 0 / 10%);
+  .mp-box-text {
+    display: inline-block;
+    text-align: left;
+    padding: 10px 0px 10px 15px;
+    width: 60%;
+    vertical-align: top;
+  }
+  .mp-box-name {
+    font-size: 19px;
+    font-weight: 600;
+    @media only screen and (max-width: 1400px) {
+      font-size: 16px;
+      line-height: 110%;
+      margin-bottom: 5px;
+    }
+  }
+  .mp-box-group {
+    font-weight: 400;
+    font-size: 14px;
+    @media only screen and (max-width: 1400px) {
+      font-size: 13px;
+      line-height: 110%;
+    }
+  }
+  img {
+    display: inline-block;
+    width: 35%;
+  }
+}
+
+//MP PROFILE MODALS
+.mp-profile-section-buttons {
+  width: 100%;
+  padding: 0;
+  .row {
+    margin: 0;
+  }
+  .mp-profile-section-button {
+    background: #ccc;
+    color: #444;
+    border: 1px solid #fff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px 20px;
+    text-align: left;
+    font-weight: 600;
+    transition: .4s all;
+    &:hover,&.active {
+      background: #1a467a;
+      color: #fff;
+    }
+  }
+}
+.mp-profile-section {
+  .mp-profile-section-inner {
+    text-align: left;
+    padding: 20px;
+    img {
+      margin-bottom: 20px;
+    }
+    .mp-profile-section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #740d09;
+    }
+    .mp-profile-section-subtitle {
+      font-size: 18px;
+      font-weight: 600;
+      color: #777;
+    }
+    .mp-profile-section-year-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 30px auto 10px auto;
+      color: #740d09;
+    }
+  }
+}
+.mobile-scroll-x {
+  overflow-x: auto;
+}
+
