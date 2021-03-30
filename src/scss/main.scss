@@ -15,6 +15,9 @@ $color_lobby: #449188;
     img {
       height: 40px;
       margin: 10px 0;
+      @media screen and (min-width: 990px) and (max-width: 1320px) {
+        height: 25px;
+      }
     }
   }
   .navbar-brand2 {
@@ -22,13 +25,16 @@ $color_lobby: #449188;
       vertical-align: middle;
       height: 50px;
       margin-left: 10px;
+      @media screen and (min-width: 990px) and (max-width: 1320px) {
+        height: 40px;
+      }
     }
   }
   a {
     font-weight: bold;
     color: $color_TI;
     &.active, &:hover {
-      color: #3695d8;
+      color: #740d09;
     }
   }
   .icon-btn {
@@ -49,6 +55,50 @@ $color_lobby: #449188;
   }
   .donate-btn-img {
     width: 150px;
+  }
+  .nav-link {
+    font-size: 15px;
+    @media screen and (min-width: 990px) and (max-width: 1320px) {
+      font-size: 13px;
+    }
+  }
+  .navbar-left {
+    .nav-item {
+      @media screen and (min-width: 990px) {
+        width: 230px;
+        background: #eee;
+        text-align: left;
+        height: 80px;
+        &:nth-child(1) {
+          width: 140px;
+          border-right: 1px solid #fff;
+        }
+        &:nth-child(2) {
+          width: 160px;
+          border-right: 1px solid #fff;
+        }
+        &.active {
+          background: #fff;
+        }
+      }
+      @media screen and (min-width: 990px) and (max-width: 1320px) {
+        width: 190px;
+        &:nth-child(1) {
+          width: 100px;
+        }
+        &:nth-child(2) {
+          width: 130px;
+        }
+      }
+    }
+    .nav-link {
+      @media screen and (min-width: 990px) {
+        padding: 15px;
+      }
+      @media screen and (min-width: 990px) and (max-width: 1320px) {
+        padding: 20px 10px;
+      }
+    }
   }
 }
 
@@ -512,6 +562,9 @@ $color_lobby: #449188;
     .details-line-title {
       font-weight: 600;
     }
+    &.details-line-nopadding {
+      padding: 0;
+    }
   }
   .details-line-title-table {
     margin-top: 10px;
@@ -955,6 +1008,10 @@ table.dataTable tbody tr:hover {
   }
   @media only screen and (max-width: 991px) {
     margin-top: -10px;
+  }
+  .data-source-date {
+    font-size: 14px;
+    margin-top: 15px;
   }
   .data-source-title {
     font-weight: 600;

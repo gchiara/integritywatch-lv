@@ -29,7 +29,7 @@
               <div class="col-lg-8 chart-col">
                 <!-- SUBSECION MENU -->
                 <div class="section-btn-container">
-                  <a href="./" class="section-btn">Privātie ziedojumi</a>
+                  <a href="./financing.php" class="section-btn">Privātie ziedojumi</a>
                   <a href="./party_member_fees.php" class="section-btn">Biedru nauda</a>
                   <a href="./mp_donations.php" class="section-btn">Saeimas deputātu ziedojumi</a>
                   <a href="./party_expenditures.php" class="section-btn active">Partiju izdevumi</a>

@@ -8,14 +8,14 @@
     <!-- Add twitter and og meta here -->
     <meta property="og:url" content="http://deputatiuzdelnas.lv/" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Deputati Uz Delnas - Politisko partiju finansēšana - Saeimas deputātu ziedojumi un biedru naudas maksājumi" />
-    <meta property="og:description" content="Šī ir lietotājam draudzīga datu bāze, kas piedāva gūt ieskatu Saeimas deputātu privātajos ziedojumos un biedru naudās, kas veikti politiskajām partijām. Uzejot uz infografika vai saraksta zemāk lietotājs var sarindot, atlasīt un filtret ziedojumus." />
+    <meta property="og:title" content="Deputāti uz Delnas - Politisko partiju finansēšana - Privātie ziedojumi" />
+    <meta property="og:description" content="Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par Latvijas politisko partiju privātajiem ziedojumiem. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt privatpersonu ziedojumus." />
     <meta property="og:image" content="http://deputatiuzdelnas.lv/images/thumbnail.png" />
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_a3.css">
+    <link rel="stylesheet" href="static/tab_a1.css">
 </head>
 <body>
     <div id="app" class="tabA">   
@@ -29,21 +29,20 @@
               <div class="col-lg-8 chart-col">
                 <!-- SUBSECION MENU -->
                 <div class="section-btn-container">
-                  <a href="./financing.php" class="section-btn">Privātie ziedojumi</a>
+                  <a href="./financing.php" class="section-btn active">Privātie ziedojumi</a>
                   <a href="./party_member_fees.php" class="section-btn">Biedru nauda</a>
-                  <a href="./mp_donations.php" class="section-btn active">Saeimas deputātu ziedojumi</a>
+                  <a href="./mp_donations.php" class="section-btn">Saeimas deputātu ziedojumi</a>
                   <a href="./party_expenditures.php" class="section-btn">Partiju izdevumi</a>
                 </div>
                 <div class="boxed-container description-container">
-                  <h1>Deputati Uz Delnas - Politisko partiju finansēšana - Saeimas deputātu ziedojumi un biedru naudas maksājumi</h1>
-                  <p>Šī ir lietotājam draudzīga datu bāze, kas piedāva gūt ieskatu Saeimas deputātu privātajos ziedojumos un biedru naudās, kas veikti politiskajām partijām. Uzejot uz infografika vai saraksta zemāk lietotājs var sarindot, atlasīt un filtret ziedojumus.</p>
+                  <h1>Deputāti uz Delnas - Politisko partiju finansēšana - Privātie ziedojumi</h1>
+                  <p>Šī ir lietotājam draudzīga datu bāze, kurā gūt informāciju par Latvijas politisko partiju privātajiem ziedojumiem. Uzejot uz infografika vai saraksta zemāk, lietotājs var sarindot, atlasīt un filtrēt privatpersonu ziedojumus.</p>
                 </div>
               </div>
               <div class="col-lg-4 chart-col">
                 <div class="data-source-box">
                   <div class="data-source-title">Datu avots:</div>
-                  <a href="https://www.knab.gov.lv/lv/db/donations/" target="_blank">https://www.knab.gov.lv/lv/db/donations/</a><br />
-                  <a href="https://www.knab.gov.lv/lv/db/subscriptions/" target="_blank">https://www.knab.gov.lv/lv/db/subscriptions/</a>
+                  <a href="https://www.knab.gov.lv/lv/db/donations/" target="_blank">https://www.knab.gov.lv/lv/db/donations/</a>
                 </div>
                 <div class="boxed-container chart-container">
                   <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
@@ -59,9 +58,9 @@
           </div>
           <!-- CHARTS FIRST ROW -->
           <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_3">
-              <chart-header :title="charts.groups.title" :info="charts.groups.info" ></chart-header>
-              <div class="chart-inner" id="groups_chart"></div>
+            <div class="boxed-container chart-container tab_a_1">
+              <chart-header :title="charts.topRecipients.title" :info="charts.topRecipients.info" ></chart-header>
+              <div class="chart-inner" id="toprecipients_chart"></div>
             </div>
           </div>
           <div class="col-md-3 chart-col">
@@ -71,15 +70,15 @@
             </div>
           </div>
           <div class="col-md-3 chart-col">
-            <div class="boxed-container chart-container tab_a_1">
-              <chart-header :title="charts.topRecipients.title" :info="charts.topRecipients.info" ></chart-header>
-              <div class="chart-inner" id="toprecipients_chart"></div>
-            </div>
-          </div>
-          <div class="col-md-3 chart-col">
             <div class="boxed-container chart-container tab_a_2">
               <chart-header :title="charts.donationsPerYear.title" :info="charts.donationsPerYear.info" ></chart-header>
               <div class="chart-inner" id="donationsperyear_chart"></div>
+            </div>
+          </div>
+          <div class="col-md-3 chart-col">
+            <div class="boxed-container chart-container tab_a_3">
+              <chart-header :title="charts.topDonors.title" :info="charts.topDonors.info" ></chart-header>
+              <div class="chart-inner" id="topdonors_chart"></div>
             </div>
           </div>
           <!-- TABLE -->
@@ -91,11 +90,11 @@
                   <thead>
                     <tr class="header">
                       <th class="header">Nr</th> 
-                      <th class="header">Deputāts</th>
-                      <th class="header">Frakcija</th>
-                      <th class="header">Veids</th>
+                      <th class="header">Partija</th>
+                      <th class="header">Ziedojuma veids</th>
                       <th class="header">Vērtība</th>
-                      <th class="header">Saņēmējs</th>
+                      <th class="header">Ziedotājs</th>
+                      <th class="header">Personas Kods</th>
                       <th class="header">Datums</th>
                     </tr>
                   </thead>
@@ -134,7 +133,7 @@
         <div class="row">
           <div class="footer-col col-12 col-sm-12 footer-counts">
             <div class="dc-data-count count-box">
-              <div class="filter-count nbdonors">0</div>no <strong class="total-count">0</strong> ziedojumiem
+              <div class="filter-count">0</div>no <strong class="total-count">0</strong> ziedojumiem
             </div>
             <div class="count-box count-box-vertiba">
               <div class="filter-count nbvertiba">0</div>no <strong class="total-count-vertiba">0</strong>
@@ -162,7 +161,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_a3.js"></script>
+    <script src="static/tab_a1.js"></script>
 
  
 </body>

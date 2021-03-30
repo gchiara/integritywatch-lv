@@ -37,21 +37,25 @@ var vuedata = {
   selectedYear: 'all',
   charts: {
     groups: {
-      title: 'Parliamentary groups',
+      title: 'Frakcijas',
       info: ''
     },
     age: {
-      title: 'Year of birth',
+      title: 'Dzimšanas gads',
       info: ''
     },
     gender: {
-      title: 'Gender',
+      title: 'Dzimums',
+      info: ''
+    },
+    status: {
+      title: 'Mandāta statuss',
       info: ''
     },
     mainTable: {
       chart: null,
       type: 'table',
-      title: 'MPs',
+      title: 'Saeimas deputāti',
       info: ''
     }
   },
@@ -64,7 +68,17 @@ var vuedata = {
   colors: {
     generic: ["#3b95d0", "#4081ae", "#406a95", "#395a75" ],
     default1: "#3695d8",
-    default2: "#449188"
+    default2: "#449188",
+    groups: {
+      "Saskaņa": "#ED1B24",
+      "Jauno Konservatīvo frakcija": "#384976",
+      "Attīstībai/Par!": "#FFDD00",
+      "Pie frakcijām nepiederošie deputāti": "#808080",
+      "Nacionāla Apvienība VL-TB/LNNK": "#932330",
+      "Zaļo un Zemnieku Savienība": "#006538",
+      "KPV LV": "#FADADD",
+      "Jaunā Vienotība": "#76BC55",
+    }
   }
 }
 
@@ -79,11 +93,6 @@ Vue.component('loader', Loader);
 new Vue({
   el: '#app',
   data: vuedata,
-  computed: {
-    totalPaginationPages: function() {
-      return Math.ceil(this.filteredData.length / this.iPerPage)
-    }
-  },
   methods: {
     //Share
     downloadDataset: function () {
@@ -163,6 +172,11 @@ var charts = {
     chart: dc.pieChart("#gender_chart"),
     type: 'pie',
     divId: 'gender_chart'
+  },
+  status: {
+    chart: dc.pieChart("#status_chart"),
+    type: 'pie',
+    divId: 'status_chart'
   }
 }
 
@@ -330,6 +344,15 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
   }
 });
 
+function sortFilteredData(a, b) {
+  if (a.fullname < b.fullname){
+    return -1;
+  }
+  if (a.fullname > b.fullname){
+    return 1;
+  }
+  return 0;
+}
 
 //Get URL parameters
 function getParameterByName(name, url) {
@@ -376,6 +399,13 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
         if(mpDonations) {
           d.donations = mpDonations;
         }
+        //Mandate Status
+        d.mandateStatus = "";
+        if(d["Mandāta statuss"] == "Pilntiesīgs mandāts") {
+          d.mandateStatus = "Pilntiesīgs mandāts";
+        } else {
+          d.mandateStatus = "Apstiprināts uz laiku";
+        }
         //Get declarations
         d.declarations = {};
         d.declarations.years = [];
@@ -404,7 +434,7 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
           var entryString = d.fullname;
           return entryString.toLowerCase();
       });
-      vuedata.filteredData = searchDimension.top(Infinity);
+      vuedata.filteredData = searchDimension.top(Infinity).sort(sortFilteredData);
 
       //CHART 1
       var createGroupsChart = function() {
@@ -433,7 +463,7 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
           .group(filteredGroup)
           .dimension(dimension)
           .colorCalculator(function(d, i) {
-            return vuedata.colors.default1;
+            return vuedata.colors.groups[d.key];
           })
           .label(function (d) {
               if(d.key && d.key.length > charsLength){
@@ -524,7 +554,43 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
           .label(function (d){
             var percent = d.value / group.all().reduce(function(a, v){ return a + v.value; }, 0);
             percent = percent*100;
-            return percent.toFixed(1) + '%';
+            return d.value;
+          })
+          .dimension(dimension)
+          .group(group);
+        chart.render();
+      }
+
+      //CHART 4
+      var createStatusChart = function() {
+        var chart = charts.status.chart;
+        var dimension = ndx.dimension(function (d) {
+          return d.mandateStatus;  
+        });
+        var group = dimension.group().reduceSum(function (d) { return 1; });
+        var sizes = calcPieSize(charts.status.divId);
+        chart
+          .width(sizes.width)
+          .height(sizes.height)
+          .cy(sizes.cy)
+          .innerRadius(sizes.innerRadius)
+          .radius(sizes.radius)
+          .legend(dc.legend().x(0).y(sizes.legendY).gap(10).legendText(function(d) { 
+            var thisKey = d.name;
+            if(thisKey.length > 40){
+              return thisKey.substring(0,40) + '...';
+            }
+            return "Apstiprināts uz laiku, kamēr ministra pienakumus pilda cits deputāts";
+            return thisKey;
+          }))
+          .title(function(d){
+            var thisKey = d.key;
+            return thisKey + ': ' + d.value;
+          })
+          .label(function (d){
+            var percent = d.value / group.all().reduce(function(a, v){ return a + v.value; }, 0);
+            percent = percent*100;
+            return d.value;
           })
           .dimension(dimension)
           .group(group);
@@ -553,7 +619,7 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
           window.clearTimeout(throttleTimer);
           throttleTimer = window.setTimeout(function() {
               dc.redrawAll();
-              vuedata.filteredData = searchDimension.top(Infinity);
+              vuedata.filteredData = searchDimension.top(Infinity).sort(sortFilteredData);
               //RefreshTable();
           }, 250);
         }
@@ -569,7 +635,7 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
         searchDimension.filter(null);
         $('#search-input').val('');
         dc.redrawAll();
-        vuedata.filteredData = searchDimension.top(Infinity);
+        vuedata.filteredData = searchDimension.top(Infinity).sort(sortFilteredData);
         //RefreshTable();
       }
       $('.reset-btn').click(function(){
@@ -581,6 +647,7 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
       createGroupsChart();
       createAgeChart();
       createGenderChart();
+      createStatusChart();
 
       $('.dataTables_wrapper').append($('.dataTables_length'));
 
@@ -596,7 +663,7 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
       counter.render();
       //Update datatables
       counter.on("renderlet.resetall", function(c) {
-        vuedata.filteredData = searchDimension.top(Infinity);
+        vuedata.filteredData = searchDimension.top(Infinity).sort(sortFilteredData);
       });
 
       //Window resize function

@@ -68,7 +68,17 @@ var vuedata = {
   colors: {
     generic: ["#3b95d0", "#4081ae", "#406a95", "#395a75" ],
     default1: "#3695d8",
-    default2: "#449188"
+    default2: "#449188",
+    groups: {
+      "Saskaņa": "#ED1B24",
+      "Jauno Konservatīvo frakcija": "#384976",
+      "Attīstībai/Par!": "#FFDD00",
+      "Pie frakcijām nepiederošie deputāti": "#808080",
+      "Nacionāla Apvienība VL-TB/LNNK": "#932330",
+      "Zaļo un Zemnieku Savienība": "#006538",
+      "KPV LV": "#FE0000",
+      "Jaunā Vienotība": "#76BC55",
+    }
   }
 }
 
@@ -331,7 +341,7 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
       .group(filteredGroup)
       .dimension(dimension)
       .colorCalculator(function(d, i) {
-        return vuedata.colors.default1;
+        return vuedata.colors.groups[d.key];
       })
       .label(function (d) {
           if(d.key && d.key.length > charsLength){
