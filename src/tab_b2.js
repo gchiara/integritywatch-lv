@@ -345,6 +345,8 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 });
 
 function sortFilteredData(a, b) {
+  return a.fullname.localeCompare(b.fullname);
+  /*
   if (a.fullname < b.fullname){
     return -1;
   }
@@ -352,6 +354,7 @@ function sortFilteredData(a, b) {
     return 1;
   }
   return 0;
+  */
 }
 
 //Get URL parameters
@@ -580,7 +583,6 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
             if(thisKey.length > 40){
               return thisKey.substring(0,40) + '...';
             }
-            return "Apstiprināts uz laiku, kamēr ministra pienakumus pilda cits deputāts";
             return thisKey;
           }))
           .title(function(d){
