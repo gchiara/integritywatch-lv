@@ -12,7 +12,7 @@
     "jw-vue-pagination": "^1.0.3",
     "popper.js": "^1.14.7",
     "scss": "^0.2.4",
-    "underscore": "^1.9.1",
+    "underscore": "^1.12.1",
     "vue": "^2.6.6",
     "vue-hot-reload-api": "^2.3.2"
   },
