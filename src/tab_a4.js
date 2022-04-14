@@ -15,7 +15,7 @@ import { json } from 'd3-request'
 
 import '../public/vendor/css/bootstrap.min.css'
 import '../public/vendor/css/dc.css'
-import '/scss/main.scss';
+import './scss/main.scss';
 
 import Vue from 'vue';
 import Loader from './components/Loader.vue';
@@ -268,6 +268,7 @@ csv('./data/tab_a/a4.csv?' + randomPar, (err, finance) => {
       vuedata.dataYears.push(d.Gads);
     }
     //Convert amount to float
+    console.log(d.Vērtība);
     d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",","")).toFixed(2);
     totVertiba += parseFloat(d.donationAmt);
     //Define amount categories

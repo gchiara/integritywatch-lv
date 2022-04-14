@@ -14,8 +14,8 @@ import { csv } from 'd3-request'
 
 import '../public/vendor/css/bootstrap.min.css'
 import '../public/vendor/css/dc.css'
-import '/scss/main.scss';
-import '/scss/about.scss';
+import './scss/main.scss';
+import './scss/about.scss';
 
 import Vue from 'vue';
 import Loader from './components/Loader.vue';

@@ -69,13 +69,20 @@ $color_lobby: #449188;
         background: #eee;
         text-align: left;
         height: 80px;
+        border-right: 1px solid #fff;
+        a {
+          display: block;
+          height: 100%;
+        }
         &:nth-child(1) {
           width: 140px;
-          border-right: 1px solid #fff;
         }
         &:nth-child(2) {
           width: 160px;
-          border-right: 1px solid #fff;
+        }
+        &:nth-child(4) {
+          width: 100px;
+          border-right: none;
         }
         &.active {
           background: #fff;
@@ -282,6 +289,12 @@ $color_lobby: #449188;
   }
   @media only screen and (max-width: 767px) {
     height: auto !important;
+  }
+  &.tab_b_map {
+    height: 620px;
+    @media only screen and (max-width: 768px) {
+      height: 600px !important;
+    }
   }
 }
 .institution-filter-container {
@@ -1139,3 +1152,30 @@ table.dataTable tbody tr:hover {
   overflow-x: auto;
 }
 
+.count-type-btn-container {
+  text-align: left;
+  .count-type-btn {
+    border-radius: 3px;
+    background: #fff;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    padding: 3px 10px;
+    transition: .4s all;
+    margin: 5px 5px 5px 0;
+    &.active, &:hover {
+      background: #154277;
+      color: #fff;
+    }
+  }
+}
+
+
+/* DC legend vertical alignment fix */
+.dc-legend{
+  .dc-legend-item {
+    rect  {
+      y: -5px !important;
+    }
+  }
+}

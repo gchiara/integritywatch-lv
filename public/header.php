@@ -14,6 +14,9 @@
       <li class="nav-item" :class="{active: page == 'tabB'}">
         <a href="./declarations.php" class="nav-link" :class="{active: page == 'tabB'}">Deputātu amatpersonas deklarācijas</a>
       </li>
+      <li class="nav-item" :class="{active: section == 'tabBmap'}">
+        <a href="./map.php" class="nav-link" :class="{active: section == 'tabA'}">Map</a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
