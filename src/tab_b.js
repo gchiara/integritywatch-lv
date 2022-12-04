@@ -89,6 +89,8 @@ var vuedata = {
       "Zaļo un Zemnieku Savienība": "#006538",
       "KPV LV": "#FE0000",
       "Jaunā Vienotība": "#76BC55",
+      "Neatkarīgie": "#abb",
+      "N/A": "#ccc"
     }
   }
 }
@@ -363,7 +365,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
   if(getParameterByName('year')) {
     vuedata.selectedYear = getParameterByName('year');
   } else {
-    vuedata.selectedYear = '2019';
+    vuedata.selectedYear = '2020';
   }
   $("#y"+vuedata.selectedYear).addClass('active');
   declarations = _.filter(declarations, function(i){ return i.DeclYear.trim() == vuedata.selectedYear; });
@@ -443,6 +445,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
   var createGroupsChart = function() {
     var chart = charts.groups.chart;
     var dimension = ndx.dimension(function (d) {
+      if(d['Frakcija'] == '') { return 'N/A'; }
       return d['Frakcija'];
     });
     var group = dimension.group().reduceSum(function (d) {
@@ -512,6 +515,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     }
     var chart = charts.topSectorsIncome.chart;
     var dimension = ndx.dimension(function(d){ 
+      //if(d.interests == '') { return 'Others';}
       return d.interests;
     });
     var group = dimension.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
@@ -542,6 +546,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       })
       .label(function (d) {
           if(d.key == 'Others') {d.key = 'Citi'}
+          if(d.key == '') {d.key = 'N/A'}
           if(d.key && d.key.length > charsLength){
             return d.key.substring(0,charsLength) + '...';
           }
@@ -549,6 +554,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       })
       .title(function (d) {
         if(d.key == 'Others') {d.key = 'Citi'}
+        if(d.key == '') {d.key = 'N/A'}
         return d.key + ': ' + d.value.toFixed(2);
       })
       .elasticX(true)
@@ -570,7 +576,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       });
   }
 
-  //CHART 2
+  //CHART 3
   var createIncomeTypeChart = function() {
     function reduceAdd(p, v) {
       var interestsArray = v.interests;
@@ -626,6 +632,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       .legend(dc.legend().x(0).y(sizes.legendY).gap(10).legendText(function(d) { 
         var thisKey = d.name;
         if(thisKey == 'Others') {thisKey = 'Citi'}
+        if(d.key == '') {d.key = 'N/A'}
         if(thisKey.length > 40){
           return thisKey.substring(0,40) + '...';
         }
@@ -633,6 +640,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       }))
       .title(function(d){
         if(d.key == 'Others') {d.key = 'Citi'}
+        if(d.key == '') {d.key = 'N/A'}
         var thisKey = d.key;
         return thisKey + ': ' + d.value;
       })
@@ -658,7 +666,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     });
   }
 
-  //CHART 1
+  //CHART 4
   var createOutsidePositionsChart = function() {
     var chart = charts.outsidePositions.chart;
     var dimension = ndx.dimension(function (d) {
@@ -726,6 +734,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
     group.all = function() {
       var newObject = [];
       for (var key in this) {
+        //&& key != ''
         if (this.hasOwnProperty(key) && key != "all") {
           newObject.push({
             key: key,
@@ -750,6 +759,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       })
       .label(function (d) {
         if(d.key == 'Others') {d.key = 'Citi'}
+        if(d.key == '') {d.key = 'N/A'}
         if(d.key && d.key.length > charsLength){
           return d.key.substring(0,charsLength) + '...';
         }
@@ -757,6 +767,7 @@ csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) =>
       })
       .title(function (d) {
         if(d.key == 'Others') {d.key = 'Citi'}
+        if(d.key == '') {d.key = 'N/A'}
         return d.key + ': ' + d.value.toFixed(2);
       })
       .elasticX(true)

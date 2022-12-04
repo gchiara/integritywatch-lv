@@ -46,6 +46,7 @@
                   <div class="years-btn-container">
                     <a class="year-btn" href="./declarations.php?year=2018" id="y2018">2018</a>
                     <a class="year-btn" href="./declarations.php?year=2019" id="y2019">2019</a>
+                    <a class="year-btn" href="./declarations.php?year=2020" id="y2020">2020</a>
                   </div>
                 </div>
               </div>

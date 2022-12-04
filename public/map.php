@@ -28,8 +28,8 @@
               <!-- INFO -->
               <div class="col-lg-8 chart-col">
                 <div class="boxed-container description-container">
-                  <h1>Deputāti uz Delnas - Interests map</h1>
-                  <p>Lorem ipsum sit dolor amet.</p>
+                  <h1>Deputāti uz Delnas - Deputātu deklarēto interešu karte</h1>
+                  <p>Zemāk attēlotajā vizualizācijā redzama Latvijas pašvaldību karte un konkrētās pašvaldībās deputātu amatpersonu deklarācijās deklarēto amatu, ienākumu, kā arī akciju un kapitāldaļu (īpašumu) skaits. Kartei iespējams iestatīt režīmus, lai aplūkotu deklarēto ienākumu un īpašumu vērtību konkrētās pašvaldībās, kā arī filtrētu ienākumu vai īpašumu vērtības rezultātus. Lūdzam ņemt vērā, ka šo mājaslapas sadaļu paredzēts pilnveidot, lai novērstu atsevišķus sarežģījumus datu apkopošanā, kas varētu novest pie nepilnīga informācijas atspoguļojuma. Precīzākai informācijai par atsevišķu deputātu deklarētajām interesēm aicinām iepazīties ar sadaļu Deputātu amatpersonu deklarācijas. Attiecīgi, iepazīstoties ar zemāk redzamo vizualizāciju, jāņem vērā, ka valstspilsētās deklarētās intereses kartē attēlotas summēti ar attiecīgā nosaukuma novadiem.</p>
                   <p class="data-source-text">
                     <strong>Datu avots: </strong>
                     <a href="https://www6.vid.gov.lv/VAD" target="_blank">https://www6.vid.gov.lv/VAD</a>, 
@@ -46,6 +46,7 @@
                   <div class="years-btn-container">
                     <a class="year-btn" href="./map.php?year=2018" id="y2018">2018</a>
                     <a class="year-btn" href="./map.php?year=2019" id="y2019">2019</a>
+                    <a class="year-btn" href="./map.php?year=2020" id="y2020">2020</a>
                   </div>
                 </div>
               </div>
@@ -54,10 +55,10 @@
           <!-- CHARTS FIRST ROW -->
           <div class="col-md-12 chart-col">
             <div class="count-type-btn-container">
-              <button class="count-type-btn active" id="amtDefault">Number of entries</button>
-              <button class="count-type-btn" id="amtIncome">Interests amount</button>
-              <button class="count-type-btn" id="amtHoldings">Holdings amount</button>
-              <button class="count-type-btn" id="amtIncomeHoldings">Interests & holdings</button>
+              <button class="count-type-btn active" id="amtDefault">Deklarēto interešu skaits</button>
+              <button class="count-type-btn" id="amtIncome">Ienākumu vērtība</button>
+              <button class="count-type-btn" id="amtHoldings">Akciju un kapitāldaļu vērtība</button>
+              <button class="count-type-btn" id="amtIncomeHoldings">Kopējā vērtība</button>
             </div>
           </div>
           <div class="col-md-9 chart-col">
@@ -83,9 +84,9 @@
                       <th class="header">Nr</th> 
                       <th class="header">Deputāts</th>
                       <th class="header">Frakcija</th>
-                      <th class="header">Interest Type</th>
-                      <th class="header">Sector</th>
-                      <th class="header">Municipality</th>
+                      <th class="header">Deklarētās intereses veids</th>
+                      <th class="header">Nozare</th>
+                      <th class="header">Pašvaldība</th>
                     </tr>
                   </thead>
                 </table>
@@ -101,7 +102,7 @@
             <!-- Modal Header -->
             <div class="modal-header">
               <div class="modal-title">
-                <div>{{ selectedElement.Surname_name }} - {{ selectedElement.Interest_Type }}</div>
+                <div>{{ selectedElement.Surname_name }} - {{ selectedElement.Interest_Type_Cleaned }}</div>
               </div>
               <button type="button" class="close" data-dismiss="modal"><i class="material-icons">close</i></button>
             </div>
@@ -110,27 +111,23 @@
               <div class="container">
                 <div class="row">
                   <div class="col-md-12">
-                    <div class="details-line" v-if="selectedElement.Surname_name"><span class="details-line-title">Name: </span> {{ selectedElement.Surname_name }}</div>
-                    <div class="details-line" v-if="selectedElement.Mandate_status"><span class="details-line-title">Mandate status: </span> {{ selectedElement.Mandate_status }}</div>
+                    <div class="details-line" v-if="selectedElement.Surname_name"><span class="details-line-title">Vārds: </span> {{ selectedElement.Surname_name }}</div>
+                    <div class="details-line" v-if="selectedElement.Mandate_status"><span class="details-line-title">Mandāta statuss: </span> {{ selectedElement.Mandate_status }}</div>
                     <div class="details-line" v-if="selectedElement.Frakcija"><span class="details-line-title">Frakcija: </span> {{ selectedElement.Frakcija }}</div>
-                    <div class="details-line" v-if="selectedElement.DeclYear"><span class="details-line-title">Declaration year: </span> {{ selectedElement.DeclYear }}</div>
-                    <div class="details-line" v-if="selectedElement.filed_as"><span class="details-line-title">Filed as: </span> {{ selectedElement.filed_as}}</div>
-                    <div class="details-line" v-if="selectedElement.Committees"><span class="details-line-title">Committees: </span> {{ selectedElement.Committees }}</div>
+                    <div class="details-line" v-if="selectedElement.DeclYear"><span class="details-line-title">Deklarācijas gads: </span> {{ selectedElement.DeclYear }}</div>
+                    <div class="details-line" v-if="selectedElement.Committees"><span class="details-line-title">Saeimas komisijas: </span> {{ selectedElement.Committees }}</div>
                     <hr />
-                    <div class="details-line" v-if="selectedElement.Interest_Type"><span class="details-line-title">Interest type: </span> {{ selectedElement.Interest_Type }}</div>
-                    <div class="details-line" v-if="selectedElement.Position"><span class="details-line-title">Position: </span> {{ selectedElement.Position }}</div>
-                    <div class="details-line" v-if="selectedElement.Income_type"><span class="details-line-title">Income type: </span> {{ selectedElement.Income_type }}</div>
-                    <div class="details-line" v-if="selectedElement.Income_value"><span class="details-line-title">Income value: </span> {{ selectedElement.Income_value }}</div>
-                    <div class="details-line" v-if="selectedElement.Holding_type"><span class="details-line-title">Holding type: </span> {{ selectedElement.Income_type }}</div>
-                    <div class="details-line" v-if="selectedElement.Holding_value"><span class="details-line-title">Holding value: </span> {{ selectedElement.Holding_value }}</div>
+                    <div class="details-line" v-if="selectedElement.Interest_Type"><span class="details-line-title">Deklarētās intereses veids: </span> {{ selectedElement.Interest_Type_Cleaned }}</div>
+                    <div class="details-line" v-if="selectedElement.Position"><span class="details-line-title">Amats: </span> {{ selectedElement.Position }}</div>
+                    <div class="details-line" v-if="selectedElement.Income_value"><span class="details-line-title">Vērtība: </span> {{ selectedElement.Income_value }}</div>
+                    <div class="details-line" v-if="selectedElement.Holding_value"><span class="details-line-title">Vērtība: </span> {{ selectedElement.Holding_value }}</div>
                     <hr />
-                    <div class="details-line" v-if="selectedElement.Entity_Type"><span class="details-line-title">Entity type: </span> {{ selectedElement.Entity_Type }}</div>
-                    <div class="details-line" v-if="selectedElement.Entity_name"><span class="details-line-title">Entity name: </span> {{ selectedElement.Entity_name }}</div>
-                    <div class="details-line" v-if="selectedElement.Entity_RegNum"><span class="details-line-title">Entity RegNum: </span> {{ selectedElement.Entity_RegNum }}</div>
-                    <div class="details-line" v-if="selectedElement.Entity_Country"><span class="details-line-title">Entity country: </span> {{ selectedElement.Entity_Country }}</div>
-                    <div class="details-line" v-if="selectedElement.Entity_Municipality"><span class="details-line-title">Entity municipality: </span> {{ selectedElement.Entity_Municipality }}</div>
-                    <div class="details-line" v-if="selectedElement.Entity_Region"><span class="details-line-title">Entity region: </span> {{ selectedElement.Entity_Region }}</div>
-                    <div class="details-line" v-if="selectedElement.Entity_Sector"><span class="details-line-title">Entity sector: </span> {{ selectedElement.Entity_Sector }}</div>
+                    <div class="details-line" v-if="selectedElement.Entity_Type"><span class="details-line-title">Juridiskas personas veids: </span> {{ selectedElement.Entity_Type }}</div>
+                    <div class="details-line" v-if="selectedElement.Entity_name"><span class="details-line-title">Juridiskas personas nosaukums: </span> {{ selectedElement.Entity_name }}</div>
+                    <div class="details-line" v-if="selectedElement.Entity_RegNum"><span class="details-line-title">Reģistrācijas nr.: </span> {{ selectedElement.Entity_RegNum }}</div>
+                    <div class="details-line" v-if="selectedElement.Entity_Country"><span class="details-line-title">Valsts: </span> {{ selectedElement.Entity_Country }}</div>
+                    <div class="details-line" v-if="selectedElement.Entity_Municipality"><span class="details-line-title">Latvijas pašvaldība: </span> {{ selectedElement.Entity_Municipality.replace("municipality", "novads").replace("state city", "valstspilsēta") }}</div>
+                    <div class="details-line" v-if="selectedElement.Entity_Sector"><span class="details-line-title">Nozare: </span> {{ selectedElement.Entity_Sector }}</div>
                   </div>
                 </div>
               </div>

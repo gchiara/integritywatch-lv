@@ -51,6 +51,7 @@
                     <button class="year-btn" id="y2018" :disabled="dataYears.indexOf('2018') == -1">2018</button>
                     <button class="year-btn" id="y2019" :disabled="dataYears.indexOf('2019') == -1">2019</button>
                     <button class="year-btn" id="y2020" :disabled="dataYears.indexOf('2020') == -1">2020</button>
+                    <button class="year-btn" id="y2021" :disabled="dataYears.indexOf('2021') == -1">2021</button>
                     <button class="year-btn active" id="yall">Visi gadi</button>
                   </div>
                 </div>

@@ -40,22 +40,27 @@ var vuedata = {
       info: ''
     },
     map: {
-      title: 'Map',
-      info: 'Map'
+      title: 'Deputātu deklarēto interešu karte',
+      info: 'Vizualizācijā redzama Latvijā pēc administratīvi teritoriālās reformas eksistējošo pašvaldību karte. Ar kartes palīdzību iespējams gūt labāku izpratni par Deputātu amatpersonu deklarāciju sadaļā uzrādīto deklarēto interešu ģeogrāfisko izvietojumu.'
     },
     topSectors: {
-      title: 'Sectors',
-      info: 'Sectors'
+      title: 'Nozares',
+      info: 'Vizualizācijā redzamas nozares, kurās deputāti deklarējuši lielāko amatu, ienākumu un akciju un kapitāldaļu skaitu vai vērtību.'
     },
     mainTable: {
       chart: null,
       type: 'table',
-      title: 'Interests',
+      title: 'Deputātu deklarētās intereses',
       info: ''
     }
   },
   selectedElement: { "P": "", "Sub": ""},
   modalShowTable: '',
+  interestTypesLv: {
+    "Position": "Amats",
+    "Income": "Ienākumi",
+    "Holding": "Īpašums"
+  },
   colors: {
     generic: ["#3b95d0", "#4081ae", "#406a95", "#395a75" ],
     default1: "#3695d8",
@@ -324,14 +329,22 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
     if(getParameterByName('year')) {
       vuedata.selectedYear = getParameterByName('year');
     } else {
-      vuedata.selectedYear = '2019';
+      vuedata.selectedYear = '2020';
     }
     $("#y"+vuedata.selectedYear).addClass('active');
     interests = _.filter(interests, function(i){ return i.DeclYear.trim() == vuedata.selectedYear; });
     var mps = [];
     var totInterests = 0;
-    //Loop through data to aply fixes and calculations
+    //Loop through data to apply fixes and calculations
     _.each(interests, function (d) {
+      //Streamline sector
+      d.Interest_Type_Cleaned = d.Interest_Type;
+      if(d.Interest_Type.indexOf("|") > -1) {
+        var streamlinedInterestType = vuedata.interestTypesLv[d.Interest_Type.split("|")[0].trim()];
+        if(streamlinedInterestType) {
+          d.Interest_Type_Cleaned = streamlinedInterestType;
+        }
+      }
       //Fix income value
       d.cleanValues = {
         income: 0,
@@ -357,17 +370,16 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
     });
 
     //MAP CHART
+    var stateCitiesList = [];
     var createMapChart = function() {
-      json('./data/lv-municipalities-topojson.json', (err, jsonmap) => {
-        /*
+      json('./data/lv-municipalities-topojson.json?' + randomPar, (err, jsonmap) => {
+        //Loop through map data to apply names tweaks
         _.each(jsonmap.objects.latvia.geometries, function (d) {
-          municipalities_names
-          var municipalityNameEntry = _.find(municipalities_names, function(i){ return i.Municipalities_Map_Names == d.properties.name; });
-          if(municipalityNameEntry && municipalityNameEntry['Municipalities_Data_Names'] !== "") {
-            d.properties.name = municipalityNameEntry['Municipalities_Data_Names'];
+          if(d.properties.name.indexOf("state city") > -1) {
+            stateCitiesList.push(d.properties.name.replace("state city", "municipality"));
           }
+          d.properties.nameValue = d.properties.name.replace("state city", "municipality");
         });
-        */
         var chart = charts.map.chart;
         var width = recalcWidth(charts.map.divId);
         var dimension = ndx.dimension(function (d) {
@@ -402,12 +414,21 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
           .group(group)
           .projection(projection)
           .colors(d3.scaleQuantize().range(["#bdd9f2", "#a6cced", "#97c1e6", "#85aedd", "#6fa6de", "#4588cc", "#2a6bad"]))
-          //.colors(d3.scaleQuantize().range(["#dae6ff", "#b3cbff", "#89adfa", "#7b9be0", "#6d8ac7", "#5f78ad", "#516694", "#43557a", "#354361"]))
           .colorDomain([1, 10])
           .colorCalculator(function (d) { return (!d || d == 0) ? '#eee' : chart.colors()(d);})
-          .overlayGeoJson(dpt, "region", function (d) { return d.properties.name.toString(); })
+          .overlayGeoJson(dpt, "region", function (d) { return d.properties.nameValue.toString(); })
+          /*
+          .valueAccessor(function (d) { 
+            return d.value; 
+          })
+          */
           .title(function (d) {
-            return d.key + ': ' + d.value + ' interests';
+            var areaValue = d.value;
+            if(!d.value) { areaValue = 0; }
+            if(stateCitiesList.indexOf(d.key) > -1) {
+              return d.key.replace("municipality", "novads un valstspilsēta").replace("state city", "novads un valstspilsēta") + ': ' + areaValue + ' interesēm';
+            }
+            return d.key.replace("municipality", "novads").replace("state city", "valstspilsēta") + ': ' + areaValue + ' interesēm';
           })
           .on('renderlet', function(chart) {});
         chart.render();
@@ -419,6 +440,9 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
     var createTopSectorsChart = function() {
       var chart = charts.topSectors.chart;
       var dimension = ndx.dimension(function (d) {
+        if(d['Entity_Sector'] == '') {
+          return "Citādi deklarētas intereses";
+        }
         return d['Entity_Sector'];
       });
       var group = dimension.group().reduceSum(function (d) {
@@ -506,7 +530,7 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
             "targets": 3,
             "defaultContent":"N/A",
             "data": function(d) {
-              return d.Interest_Type;
+              return d.Interest_Type_Cleaned;
             }
           },
           {
@@ -524,7 +548,9 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
             "targets": 5,
             "defaultContent":"N/A",
             "data": function(d) {
-              return d.Entity_Municipality;
+              if(d.Entity_Municipality) {
+                return d.Entity_Municipality.replace("municipality", "novads").replace("state city", "valstspilsēta");
+              }
             }
           }
         ],
@@ -613,10 +639,22 @@ csv('./data/tab_b/interests_map.csv?' + randomPar, (err, interests) => {
         .title(function (d) {
           var formattedValue = d.value;
           if(d.value) { formattedValue = d.value.toFixed(0) }
-          return d.key + ': ' + formattedValue + ' ' + amtTypeText;
+          if(stateCitiesList.indexOf(d.key) > -1) {
+            return d.key.replace("municipality", "novads un valstspilsēta").replace("state city", "novads un valstspilsēta") + ': ' + formattedValue + ' ' + amtTypeText;
+          }
+          return d.key.replace("municipality", "novads").replace("state city", "valstspilsēta") + ': ' + formattedValue + ' ' + amtTypeText;
         });
+      var newSectorsfilteredGroup = (function(source_group) {
+        return {
+          all: function() {
+            return source_group.top(20).filter(function(d) {
+              return (d.value != 0);
+            });
+          }
+        };
+      })(groups.sectorsChart[btnId]);
       charts.topSectors.chart
-        .group(groups.sectorsChart[btnId])
+        .group(newSectorsfilteredGroup)
         .title(function (d) {
           return d.key + ': ' + d.value.toFixed(0) + ' ' + amtTypeText;
         });

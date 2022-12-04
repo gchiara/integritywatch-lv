@@ -15,7 +15,7 @@
         <a href="./declarations.php" class="nav-link" :class="{active: page == 'tabB'}">Deputātu amatpersonas deklarācijas</a>
       </li>
       <li class="nav-item" :class="{active: section == 'tabBmap'}">
-        <a href="./map.php" class="nav-link" :class="{active: section == 'tabA'}">Map</a>
+        <a href="./map.php" class="nav-link" :class="{active: section == 'tabA'}">Deputātu deklarēto interešu karte</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">

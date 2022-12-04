@@ -57,9 +57,9 @@ $color_lobby: #449188;
     width: 150px;
   }
   .nav-link {
-    font-size: 15px;
+    font-size: 13px;
     @media screen and (min-width: 990px) and (max-width: 1320px) {
-      font-size: 13px;
+      font-size: 12px;
     }
   }
   .navbar-left {
@@ -75,13 +75,16 @@ $color_lobby: #449188;
           height: 100%;
         }
         &:nth-child(1) {
-          width: 140px;
+          width: 120px;
         }
         &:nth-child(2) {
-          width: 160px;
+          width: 140px;
+        }
+        &:nth-child(3) {
+          width: 200px;
         }
         &:nth-child(4) {
-          width: 100px;
+          width: 170px;
           border-right: none;
         }
         &.active {
@@ -96,11 +99,18 @@ $color_lobby: #449188;
         &:nth-child(2) {
           width: 130px;
         }
+        &:nth-child(3) {
+          width: 180px;
+        }
+        &:nth-child(4) {
+          width: 150px;
+          border-right: none;
+        }
       }
     }
     .nav-link {
       @media screen and (min-width: 990px) {
-        padding: 15px;
+        padding: 19px 15px;
       }
       @media screen and (min-width: 990px) and (max-width: 1320px) {
         padding: 20px 10px;
