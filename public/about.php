@@ -115,6 +115,8 @@
                 <li>redzēt kopējos izdevumus pa gadiem;</li> 
                 <li>salīdzināt dažādu izdevumu kopējo vērtību.</li>
                 </ul>
+                <p><strong>Lielziedotāju indikators</strong> ļauj identificēt tās personas, kuru kopējais ziedojumu vai biedra naudas apmērs kalendāra gada ietvaros sasniedz vai pārsniedz Politisko organizāciju (partiju) finansēšanas likumā noteikto 5 minimālo mēnešalgu slieksni.</p>
+                <p>Indikators ne vien papildina Top 10 maksātāju infografiku, ļaujot identificēt lielākos partiju ziedotājus, bet arī palīdz identificēt tās personas, kuras, sasniedzot likumā noteikto maksājumu limitu, varētu būt motivētas, turpmākos maksājumos nelikumīgi izmantot starpniekus.</p>
                 <h3>Informācijas atjaunošana un precizitāte</h3>
                 <p>Delna manuāli iegūst informāciju KNAB datu bāzē, lai katra mēneša beigās atjauninātu datus digitālajā rīkā. Par datu un informācijas pareizību ir atbildīgas politiskās partijas, kas ziņo par ziedotājiem un iesniedz deklarācijas KNAB, kā arī KNAB, kas tālāk šo informāciju publicē savā datu bāzē.</p>
                 <p>Ņemot vērā, ka Delna manuāli iegūst un “attīra” datus, lai padarītu tos lietotājam draudzīgus, ir iespējams, ka informācija nebūs 100% precīza. Pirms informācijas tālākas publicēšanas iesakām informāciju pārbaudīt  KNAB datu bāzē. Gadījumos, kad ieraugāt neprecizitātes informācijā lūgums sazināties ar Delnu, rakstot uz e-pastu <a href="deputatiuzdelnas@delna.lv">deputatiuzdelnas@delna.lv</a>.</p>

@@ -946,14 +946,14 @@ table.dataTable tbody tr:hover {
 
 .years-btn-container {
   padding: 20px 15px 15px 15px;
-  .year-btn {
+  .year-btn, .mandate-btn {
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
     color: #fff;
     background: #3695d8;
     border: none;
-    padding: 5px 15px;
+    padding: 3px 15px;
     border-radius: 3px;
     margin-bottom: 5px;
     &.active,&:hover {

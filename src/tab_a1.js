@@ -254,7 +254,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
   "euro-amount-pre": function (amt) {
     //var cleanAmt = parseFloat(amt.replace(" €","").replace(".","").replace(",","."));
-    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",",""));
+    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("EUR ","").replace("€ ","").replace("€","").replace(",",""));
     return cleanAmt;
   },
   "euro-amount-asc": function ( a, b ) {
@@ -288,7 +288,7 @@ csv('./data/tab_a/a1.csv?' + randomPar, (err, finance) => {
       vuedata.dataYears.push(d.Year);
     }
     //Convert amount to float
-    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("€ ","").replace(",","")).toFixed(2);
+    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("EUR ","").replace("€ ","").replace(",","")).toFixed(2);
     if(isNaN(d.donationAmt)) {
       d.donationAmt = 0;
     }
@@ -302,10 +302,14 @@ csv('./data/tab_a/a1.csv?' + randomPar, (err, finance) => {
     else if(d.donationAmt < 7500) { d.amtCat = "5000—7500" }
     else if(d.donationAmt < 9500) { d.amtCat = "7500—9500" }
     else if(d.donationAmt >= 9500) { d.amtCat = "9500 +" }
+    //Flags string
+    d['FlagsString'] = '';
+    if(d['Flags'].indexOf('above_yearly_limit') > -1) {
+      d['FlagsString'] = 'Lielziedotājs';
+    }
   });
   //Set totals for custom counters
   $('.total-count-vertiba').html(addcommas(totVertiba.toFixed(0)));
-console.log(vuedata.dataYears);
   //Set dc main vars. The second crossfilter is used to handle the travels stacked bar chart.
   var ndx = crossfilter(finance);
   var searchDimension = ndx.dimension(function (d) {
@@ -541,6 +545,15 @@ console.log(vuedata.dataYears);
           "type": "date-eu",
           "data": function(d) {
             return d['Datums'];
+          }
+        },
+        {
+          "searchable": false,
+          "orderable": true,
+          "targets": 7,
+          "defaultContent":"N/A",
+          "data": function(d) {
+            return d['FlagsString'];
           }
         }
       ],

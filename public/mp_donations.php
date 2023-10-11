@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_a3.css">
+    <link rel="stylesheet" href="static/tab_a3.css?v=3">
 </head>
 <body>
     <div id="app" class="tabA">   
@@ -37,6 +37,7 @@
                 <div class="boxed-container description-container">
                   <h1>Deputati Uz Delnas - Politisko partiju finansēšana - Saeimas deputātu ziedojumi un biedru naudas maksājumi</h1>
                   <p>Šī ir lietotājam draudzīga datu bāze, kas piedāva gūt ieskatu Saeimas deputātu privātajos ziedojumos un biedru naudās, kas veikti politiskajām partijām. Uzejot uz infografika vai saraksta zemāk lietotājs var sarindot, atlasīt un filtret ziedojumus.</p>
+                  <p>Lielziedotāju indikators ļauj identificēt tās personas, kuru kopējais ziedojumu vai biedra naudas apmērs kalendāra gada ietvaros sasniedz vai pārsniedz Politisko organizāciju (partiju) finansēšanas likumā noteikto 5 minimālo mēnešalgu slieksni. Detalizētāk skat. mājaslapas sadaļā Par projektu.</p>
                 </div>
               </div>
               <div class="col-lg-4 chart-col">
@@ -48,11 +49,17 @@
                 <div class="boxed-container chart-container">
                   <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
                   <div class="years-btn-container">
+                    <!--
                     <button class="year-btn" id="y2018" :disabled="dataYears.indexOf('2018') == -1">2018</button>
                     <button class="year-btn" id="y2019" :disabled="dataYears.indexOf('2019') == -1">2019</button>
                     <button class="year-btn" id="y2020" :disabled="dataYears.indexOf('2020') == -1">2020</button>
                     <button class="year-btn" id="y2021" :disabled="dataYears.indexOf('2021') == -1">2021</button>
+                    <button class="year-btn" id="y2022" :disabled="dataYears.indexOf('2022') == -1">2022</button>
+                    <button class="year-btn" id="y2023" :disabled="dataYears.indexOf('2023') == -1">2023</button>
                     <button class="year-btn active" id="yall">Visi gadi</button>
+                    -->
+                    <button class="mandate-btn" id="m13">13. Saeima</button>
+                    <button class="mandate-btn active" id="m14">14. Saeima</button>
                   </div>
                 </div>
               </div>
@@ -98,6 +105,7 @@
                       <th class="header">Vērtība</th>
                       <th class="header">Saņēmējs</th>
                       <th class="header">Datums</th>
+                      <th class="header">Flags</th>
                     </tr>
                   </thead>
                 </table>
@@ -163,7 +171,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_a3.js"></script>
+    <script src="static/tab_a3.js?v=3"></script>
 
  
 </body>

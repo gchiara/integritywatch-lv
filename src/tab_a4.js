@@ -240,7 +240,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 });
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
   "euro-amount-pre": function (amt) {
-    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",",""));
+    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("EUR ","").replace("€ ","").replace("€","").replace(",",""));
     return cleanAmt;
   },
   "euro-amount-asc": function ( a, b ) {
@@ -499,6 +499,9 @@ csv('./data/tab_a/a4.csv?' + randomPar, (err, finance) => {
           "targets": 4,
           "defaultContent":"N/A",
           "data": function(d) {
+            if(d['Vērtība'].indexOf('€') == -1) {
+              return '€ ' + d['Vērtība'];
+            }
             return d['Vērtība'];
           }
         }

@@ -35,7 +35,12 @@ var vuedata = {
   showAllCharts: true,
   chartMargin: 40,
   selectedYear: 'all',
+  legislature: 13,
   charts: {
+    yearsFilter: {
+      title: 'Gadi',
+      info: ''
+    },
     groups: {
       title: 'Frakcijas',
       info: ''
@@ -78,6 +83,13 @@ var vuedata = {
       "Zaļo un Zemnieku Savienība": "#006538",
       "KPV LV": "#FADADD",
       "Jaunā Vienotība": "#76BC55",
+      "Frakcija PROGRESĪVIE": "#ee3a29",
+      "Frakcija LATVIJA PIRMAJĀ VIETĀ": "#9e3039",
+      "Frakcija JAUNĀ VIENOTĪBA": "#91c977",
+      "Zaļo un Zemnieku savienības frakcija": "#338460",
+      "Frakcija “APVIENOTAIS SARAKSTS – Latvijas Zaļā partija, Latvijas Reģionu Apvienība, Liepājas partija”": "#ffa800",
+      "Frakcija “Nacionālā apvienība”": "#a94f59",
+      "Frakcija “Stabilitātei!”": "#f67c01"
     }
   }
 }
@@ -368,16 +380,26 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
+var mpsFile = './data/tab_b/groups.csv?';
+var donationsFile = './data/tab_b/donations.csv?';
+var declarationsFile = './data/tab_b/interests_and_assets.csv?';
+if(getParameterByName('saeima') == 14) {
+  mpsFile = './data/tab_b/groups_14.csv?';
+  donationsFile = './data/tab_b/donations_14.csv?';  
+  vuedata.legislature = 14;
+}
+
 //Generate random parameter for dynamic dataset loading (to avoid caching)
 var randomPar = '';
 var randomCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 for ( var i = 0; i < 5; i++ ) {
   randomPar += randomCharacters.charAt(Math.floor(Math.random() * randomCharacters.length));
 }
+
 //Load data and generate charts
-csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
-  csv('./data/tab_b/donations.csv?' + randomPar, (err, donations) => {
-    csv('./data/tab_b/interests_and_assets.csv?' + randomPar, (err, declarations) => {
+csv(mpsFile + randomPar, (err, mps) => {
+  csv(donationsFile + randomPar, (err, donations) => {
+    csv(declarationsFile + randomPar, (err, declarations) => {
       //Loop through data to aply fixes and calculations
       _.each(mps, function (d) {
         d.fullname = d["Deputāts/e"].trim();
@@ -390,6 +412,12 @@ csv('./data/tab_b/groups.csv?' + randomPar, (err, mps) => {
         }
         if(jpgs.indexOf(slugify(lastName)) !== -1) {
           d.photoUrl = 'images/photos/'+slugify(lastName)+'.jpg';
+        }
+        //Try to get mp id from url for photo
+        //https://titania.saeima.lv/personal/deputati/saeima14_depweb_public.nsf/0/96A252C4C3BA55CFC22588E0002AE0B8?OpenDocument&lang=LV,Agita.Zarina-Sture@saeima.lv
+        if(d['Darbība 13.Saeimā'] && d['Darbība 13.Saeimā'].indexOf('saeima14_depweb_public.nsf') > -1) {
+          console.log(d['Darbība 13.Saeimā']);
+          d.urlId = d['Darbība 13.Saeimā'].split('?OpenDocument')[0].split('/').pop();
         }
         //Get birth year category
         d.birthYearRange = "19" + d["Dzimšanas gads"][2] + "0 - " + d["Dzimšanas gads"][2] + "9";

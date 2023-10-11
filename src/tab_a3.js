@@ -80,7 +80,14 @@ var vuedata = {
       "KPV LV": "#FE0000",
       "Jaunā Vienotība": "#76BC55",
       "Neatkarīgie": "#aaaaaa",
-      "n/a": "#cccccc"
+      "n/a": "#cccccc",
+      "Frakcija PROGRESĪVIE": "#ee3a29",
+      "Frakcija LATVIJA PIRMAJĀ VIETĀ": "#9e3039",
+      "Frakcija JAUNĀ VIENOTĪBA": "#91c977",
+      "Zaļo un Zemnieku savienības frakcija": "#338460",
+      "Frakcija “APVIENOTAIS SARAKSTS – Latvijas Zaļā partija, Latvijas Reģionu Apvienība, Liepājas partija”": "#ffa800",
+      "Frakcija “Nacionālā apvienība”": "#a94f59",
+      "Frakcija “Stabilitātei!”": "#f67c01"
     }
   }
 }
@@ -262,7 +269,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 });
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
   "euro-amount-pre": function (amt) {
-    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",",""));
+    var cleanAmt = parseFloat(amt.trim().replace("  "," ").replace("EUR ","").replace("€ ","").replace("€","").replace(",",""));
     return cleanAmt;
   },
   "euro-amount-asc": function ( a, b ) {
@@ -290,12 +297,25 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
     var splitDate = d['Datums'].split('/');
     if(splitDate.length == 3) {
       d.Year = splitDate[2];
+      var dateInt = parseInt(splitDate[2] + splitDate[1] + splitDate[0]);
+    }
+    d.mandate = '';
+    if(dateInt) {
+      if(dateInt >= 20221101) {
+        d.mandate = 'm14';
+      } else if(dateInt < 20221101) {
+        d.mandate = 'm13';
+      }
+    }
+    if(d.mandate.replace('m','') !== d.Legislature) { 
+      console.log(d);
+      console.log('WRONG LEG');
     }
     if(vuedata.dataYears.indexOf(d.Year) == -1) {
       vuedata.dataYears.push(d.Year);
     }
     //Convert amount to float
-    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("€ ","").replace("€","").replace(",","")).toFixed(2);
+    d.donationAmt = parseFloat(d.Vērtība.trim().replace("  "," ").replace("EUR ","").replace("€ ","").replace("€","").replace(",","")).toFixed(2);
     totVertiba += parseFloat(d.donationAmt);
     //Define amount categories
     d.amtCat = "N/A";
@@ -306,6 +326,13 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
     else if(d.donationAmt < 7500) { d.amtCat = "5000—7500" }
     else if(d.donationAmt < 9500) { d.amtCat = "7500—9500" }
     else if(d.donationAmt >= 9500) { d.amtCat = "9500 +" }
+    //Clean parties
+    d.partyChart = d['Frakcija'];
+    //Flags string
+    d['FlagsString'] = '';
+    if(d['Flags'].indexOf('above_yearly_limit') > -1) {
+      d['FlagsString'] = 'Lielziedotājs';
+    }
   });
   //Set totals for custom counters
   $('.total-count-vertiba').html(addcommas(totVertiba.toFixed(0)));
@@ -316,12 +343,18 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
       var entryString = d['Partija'] + ' ' + d['Dāvinātājs'] + ' year_val:' + d['Year'];
       return entryString.toLowerCase();
   });
+  var mandateDimension = ndx.dimension(function (d) {
+    return d.mandate;
+  });
+  mandateDimension.filter(function(d) { 
+    return d == 'm14';
+  });
 
   //CHART 1
   var createGroupsChart = function() {
     var chart = charts.groups.chart;
     var dimension = ndx.dimension(function (d) {
-      return d['Frakcija'];
+      return d.partyChart;
     });
     var group = dimension.group().reduceSum(function (d) {
         return d.donationAmt;
@@ -545,6 +578,15 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
           "data": function(d) {
             return d['Datums'];
           }
+        },
+        {
+          "searchable": false,
+          "orderable": true,
+          "targets": 7,
+          "defaultContent":"N/A",
+          "data": function(d) {
+            return d['FlagsString'];
+          }
         }
       ],
       "iDisplayLength" : 25,
@@ -592,6 +634,19 @@ csv('./data/tab_a/a3.csv?' + randomPar, (err, finance) => {
         return d.indexOf('year_val:'+vuedata.selectedYear) !== -1;
       });
     }
+    dc.redrawAll();
+    RefreshTable();
+  });
+
+  //MANDATE FILTER
+  $('.mandate-btn').click(function(){
+    $('.mandate-btn').removeClass('active');
+    $(this).addClass('active');
+    var thisId = $(this).attr('id');
+    vuedata.selectedYear = thisId;
+    mandateDimension.filter(function(d) { 
+      return d == vuedata.selectedYear;
+    });
     dc.redrawAll();
     RefreshTable();
   });

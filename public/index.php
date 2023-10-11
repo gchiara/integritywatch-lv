@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_b2.css">
+    <link rel="stylesheet" href="static/tab_b2.css?v=1">
 </head>
 <body>
     <div id="app" class="tabB">   
@@ -35,11 +35,18 @@
               <div class="col-lg-4 chart-col">
                 <div class="data-source-box data-source-box-b">
                   <div class="data-source-title">Datu avots:</div>
-                  <a href="www.saeima.lv" target="_blank">www.saeima.lv</a><br />
-                  <a href="www.cvk.lv" target="_blank">www.cvk.lv</a><br />
-                  <a href="www.knab.gov.lv" target="_blank">www.knab.gov.lv</a><br />
+                  <a href="www.saeima.lv" target="_blank">www.saeima.lv</a> | 
+                  <a href="www.cvk.lv" target="_blank">www.cvk.lv</a> | 
+                  <a href="www.knab.gov.lv" target="_blank">www.knab.gov.lv</a> | 
                   <a href="www.vid.gov.lv" target="_blank">www.vid.gov.lv</a>
                   <div class="data-source-date">Pēdējais atjauninājums: 03.2021</div>
+                </div>
+                <div class="boxed-container chart-container">
+                  <chart-header :title="charts.yearsFilter.title" :info="charts.yearsFilter.info" ></chart-header>
+                  <div class="years-btn-container">
+                    <a class="mandate-btn" :class="{active: legislature == 13}" href="./index.php?saeima=13" id="m13">13. Saeima</a>
+                    <a class="mandate-btn" :class="{active: legislature == 14}" href="./index.php?saeima=14" id="m14">14. Saeima</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -79,7 +86,8 @@
                     <div class="row">
                       <div v-for="mp in pageOfItems" class="mp-box col-lg-3 col-md-4 col-sm-6" @click="showMpPanel(mp)">
                         <div class="mp-box-inner">
-                          <img :src="mp.photoUrl" />
+                          <img v-if="legislature == 13" :src="mp.photoUrl" />
+                          <img v-if="legislature == 14 && mp.urlId" :src="'https://titania.saeima.lv/personal/deputati/saeima14_depweb_public.nsf/0/'+mp.urlId+'/Foto/0.84?OpenElement&FieldElemFormat=jpg'" />
                           <div class="mp-box-text">
                             <div class="mp-box-name">{{mp.fullname}}</div>
                             <div class="mp-box-group">{{mp.Frakcija}}</div>
@@ -112,7 +120,7 @@
               <div class="row">
                 <div class="mp-profile-section-button col-md-4" @click="profileSection = 1" :class="{ active: profileSection == 1 }">1 - Profils</div>
                 <div class="mp-profile-section-button col-md-4" @click="profileSection = 2;initDonationsTable();" :class="{ active: profileSection == 2 }">2 - Ziedojumi politiskajām partijām un to apvienibām</div>
-                <div class="mp-profile-section-button col-md-4" @click="profileSection = 3" :class="{ active: profileSection == 3 }">3 - Deputāta valsts amatpersona deklarācijas</div>
+                <div v-if="legislature == 13" class="mp-profile-section-button col-md-4" @click="profileSection = 3" :class="{ active: profileSection == 3 }">3 - Deputāta valsts amatpersona deklarācijas</div>
               </div>
             </div>
             <!-- Modal body -->
@@ -124,7 +132,8 @@
                     <div v-show="profileSection == 1" class="mp-profile-section">
                       <div class="row">
                         <div class="col-md-2 mp-profile-section-inner">
-                          <img :src="selectedElement.photoUrl" />
+                          <img v-if="legislature == 13" :src="selectedElement.photoUrl" />
+                          <img v-if="legislature == 14 && selectedElement.urlId" :src="'https://titania.saeima.lv/personal/deputati/saeima14_depweb_public.nsf/0/'+selectedElement.urlId+'/Foto/0.84?OpenElement&FieldElemFormat=jpg'" />
                         </div>
                         <div class="col-md-10 mp-profile-section-inner">
                           <div class="details-line"><span class="details-line-title">Vards: </span> {{ selectedElement["Deputāts/e"] }}</div>
@@ -136,7 +145,7 @@
                           <div class="details-line" v-if="selectedElement['Frakcija']"><span class="details-line-title">Frakcija Saeimā: </span> {{ selectedElement["Frakcija"] }}</div>
                           <div class="details-line" v-if="selectedElement['Ievelēts/-a no saraksta']"><span class="details-line-title">Ievelēts /-a no saraksta: </span> {{ selectedElement["Ievelēts/-a no saraksta"] }}</div>
                           <div class="details-line" v-if="selectedElement['Mandāta statuss']"><span class="details-line-title">Mandāta statuss: </span> {{ selectedElement["Mandāta statuss"] }}</div>
-                          <div class="details-line" v-if="selectedElement['Darbība 13.Saeimā']"><span class="details-line-title"><a :href="selectedElement['Darbība 13.Saeimā']" target="_blank">Darbība 13. Saeimā</a></span></div>
+                          <div class="details-line" v-if="selectedElement['Darbība 13.Saeimā']"><span class="details-line-title"><a :href="selectedElement['Darbība 13.Saeimā']" target="_blank">Darbība {{legislature}}. Saeimā</a></span></div>
                           <div class="details-line" v-if="selectedElement['E-pasta adrese']"><span class="details-line-title">E-pasta adrese: </span> {{ selectedElement["E-pasta adrese"] }}</div>
                         </div>
                       </div>
@@ -297,7 +306,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_b2.js"></script>
+    <script src="static/tab_b2.js?v=1"></script>
 
  
 </body>

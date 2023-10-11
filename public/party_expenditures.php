@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
-    <link rel="stylesheet" href="static/tab_a4.css">
+    <link rel="stylesheet" href="static/tab_a4.css?v=3">
 </head>
 <body>
     <div id="app" class="tabA">   
@@ -51,6 +51,8 @@
                     <button class="year-btn" id="y2019" :disabled="dataYears.indexOf('2019') == -1">2019</button>
                     <button class="year-btn" id="y2020" :disabled="dataYears.indexOf('2020') == -1">2020</button>
                     <button class="year-btn" id="y2021" :disabled="dataYears.indexOf('2021') == -1">2021</button>
+                    <button class="year-btn" id="y2022" :disabled="dataYears.indexOf('2022') == -1">2022</button>
+                    <button class="year-btn" id="y2023" :disabled="dataYears.indexOf('2023') == -1">2023</button>
                     <button class="year-btn active" id="yall">Visi gadi</button>
                   </div>
                 </div>
@@ -154,7 +156,7 @@
     <script type="text/javascript" src="vendor/js/crossfilter.min.js"></script>
     <script type="text/javascript" src="vendor/js/dc.js"></script>
     <script type="text/javascript" src="vendor/js/dc.cloud.js"></script>
-    <script src="static/tab_a4.js"></script>
+    <script src="static/tab_a4.js?v=3"></script>
 
  
 </body>
